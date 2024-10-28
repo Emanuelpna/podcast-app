@@ -84,6 +84,10 @@ export function useTrackPlayer() {
       episode: podcastEpisode,
     };
 
+    await Audio.setAudioModeAsync({
+      staysActiveInBackground: true,
+    });
+
     const { sound } = await Audio.Sound.createAsync(
       { uri: podcastEpisode.audioFile.url },
       { shouldPlay: true }
@@ -110,17 +114,24 @@ export function useTrackPlayer() {
   function play() {
     if (!playbackObject) return;
 
+    console.log('Play :>> ');
+
     return playbackObject.playAsync();
   }
 
   function pause() {
     if (!playbackObject) return;
 
+    console.log('Pause :>> ');
+
+
     return playbackObject.pauseAsync();
   }
 
   async function goToTrackPosition(progress) {
     if (!playbackObject) return;
+
+    console.log('GoToTrackPosition :>> ');
 
     setIsLoading(true);
 
