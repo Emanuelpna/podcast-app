@@ -22,7 +22,7 @@ export function useFirebaseAuth(navigation) {
 
       setMessage('Sucesso');
       setUserIsLoggedIn(true);
-      navigation.navigate('HomePage');
+      navigation.navigate('BaseNavigation');
     } catch (error) {
       console.log(error, error === 'Erro na autenticação');
       setMessage(error);
@@ -38,7 +38,7 @@ export function useFirebaseAuth(navigation) {
 
                 setMessage('Sucesso');
                 setUserIsLoggedIn(true);
-                navigation.navigate('HomePage');
+                navigation.navigate('BaseNavigation');
               } catch (error) {
                 setMessage(error);
               }
