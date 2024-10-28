@@ -9,6 +9,7 @@ import { useTrackPlayer } from '../../../infra/trackPlayer/useTrackPlayer';
 import { IconButton } from '../../commons/IconButton/IconButton';
 
 import * as S from './styles';
+import { colors } from '../../../styles/colors';
 
 // const currentTrack = {
 //   id: 'e5226e8a-b4f3-4f47-aed8-b2060140714a',
@@ -69,10 +70,10 @@ export function MiniPlayer({
         <IconButton
           size={14}
           onButtonPress={onTogglePlayPause}
-          icon={({ color }) => (
+          icon={() => (
             <FontAwesome6
               size={14}
-              color={color}
+              color={colors.text[300]}
               name={isPlaying ? 'pause' : 'play'}
               style={{ marginLeft: isPlaying ? 0 : 2 }}
             />

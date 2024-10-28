@@ -24,7 +24,7 @@ export const tabOptionsStyle = {
     borderTopColor: colors.background[800],
     backgroundColor: colors.background[900],
   },
-  tabBarLabelStyle: {    
+  tabBarLabelStyle: {
     fontFamily: fonts.fontFamily.heading,
   },
 };

@@ -62,7 +62,6 @@ export function PodcastChannelBio({ channel }) {
           ellipsizeMode="tail"
           numberOfLines={isDescriptionTruncated ? 4 : Number.MAX_SAFE_INTEGER}
           onTextLayout={(event) => {
-            console.log(event.nativeEvent.lines.length);
             setIsDescriptionOverflowing(event.nativeEvent.lines.length > 4);
           }}>
           {channel.description}

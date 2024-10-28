@@ -8,6 +8,7 @@ import { useTimeToToPrettySecondsString } from '../../../data/hooks/useTimeToToP
 import { IconButton } from '../../commons/IconButton/IconButton';
 
 import * as S from './styles';
+import { colors } from '../../../styles/colors';
 
 export function PodcastEpisodeItemList({
   channel,
@@ -36,7 +37,7 @@ export function PodcastEpisodeItemList({
 
       <View
         style={{
-          width: '50%',          
+          width: '50%',
           justifyContent: 'center',
         }}>
         <S.EpisodeTitle numberOfLines={2}>
@@ -50,7 +51,7 @@ export function PodcastEpisodeItemList({
 
       <View
         style={{
-          width: '30%',          
+          width: '30%',
           flexWrap: 'nowrap',
           flexDirection: 'row',
           alignItems: 'center',
@@ -59,11 +60,11 @@ export function PodcastEpisodeItemList({
         <IconButton
           size={14}
           onButtonPress={() => onEpisodePlay(episode.id)}
-          icon={({ color }) => (
+          icon={() => (
             <FontAwesome6
               name="play"
               size={14}
-              color={color}
+              color={colors.text[300]}
               style={{
                 marginLeft: 3,
               }}
@@ -94,13 +95,13 @@ export function PodcastEpisodeItemList({
           }>
           <Menu.Item
             leadingIcon="arrow-top-right-thin"
-            onPress={() => {}}
+            onPress={() => { }}
             title="Abrir Canal"
           />
           <Divider />
           <Menu.Item
             leadingIcon="trash-can-outline"
-            onPress={() => {}}
+            onPress={() => { }}
             title="Apagar"
           />
         </Menu>

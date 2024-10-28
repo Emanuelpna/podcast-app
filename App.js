@@ -30,7 +30,7 @@ export default function App() {
         <TrackPlayerProvider>
           <NavigationContainer>
             <LoginNavigation />
-            <StatusBar style="auto" />
+            <StatusBar style="light" />
           </NavigationContainer>
         </TrackPlayerProvider>
       </PaperProvider>

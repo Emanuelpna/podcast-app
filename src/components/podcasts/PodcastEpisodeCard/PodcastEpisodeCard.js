@@ -8,6 +8,7 @@ import { Button } from '../../commons/Button/Button';
 import { IconButton } from '../../commons/IconButton/IconButton';
 
 import * as S from './styles';
+import { colors } from '../../../styles/colors';
 
 export function PodcastEpisodeCard({
   channel,
@@ -44,8 +45,8 @@ export function PodcastEpisodeCard({
           }}>
           <Button
             onPress={() => onEpisodePlay(episode.id)}
-            icon={({ color }) => (
-              <FontAwesome6 name="play" size={14} color={color} />
+            icon={() => (
+              <FontAwesome6 name="play" size={14} color={colors.text[800]} />
             )}>
             <Text>Play</Text>
           </Button>

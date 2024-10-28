@@ -13,11 +13,9 @@ export const Container = styled.View`
   justify-content: space-between;
 `;
 
-export const Header = styled.View` 
+export const Header = styled.View`
   width: 100%;
-  height: 480px;
-  padding: 12px;
-  aspect-ratio: 1 / 1;
+  min-height: 460px;
   flex-wrap: nowrap;
   flex-direction: column;
   align-items: stretch;
