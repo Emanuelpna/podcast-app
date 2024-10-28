@@ -32,9 +32,8 @@ export class Navigations {
     channel,
     episode
   ) {
-    return loadTrackIntoPlayer(channel, episode).then(() =>
-      navigation.navigate('PlayerPage')
-    );
+    loadTrackIntoPlayer(channel, episode)
+    return navigation.navigate('PlayerPage')
   }
 
   static navigateToPlaylistsPage(navigation) {

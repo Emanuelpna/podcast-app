@@ -8,6 +8,8 @@ import { Layout } from '../../commons/Layout/Layout';
 import { IconButton } from '../../commons/IconButton/IconButton';
 
 import * as S from './styles';
+import { colors } from '../../../styles/colors';
+import { Navigations } from '../../../data/Navigations';
 
 export function PodcastEpisodePage({ route, navigation }) {
   const { channel, episode } = route.params;
@@ -18,9 +20,7 @@ export function PodcastEpisodePage({ route, navigation }) {
   const { loadTrackIntoPlayer } = useTrackPlayer();
 
   function playPodcastEpisode() {
-    loadTrackIntoPlayer(channel, episode).then(() =>
-      navigation.navigate('PlayerPage')
-    );
+    Navigations.navigateToPlayerPage(navigation, loadTrackIntoPlayer, channel, episode)
   }
 
   return (
@@ -62,11 +62,11 @@ export function PodcastEpisodePage({ route, navigation }) {
           <IconButton
             size={32}
             onButtonPress={playPodcastEpisode}
-            icon={({ color }) => (
+            icon={() => (
               <FontAwesome6
                 name="play"
                 size={24}
-                color={color}
+                color={colors.text[300]}
                 style={{
                   marginLeft: 3,
                 }}
