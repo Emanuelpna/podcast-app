@@ -21,4 +21,20 @@ export class PodcastChannel {
     /** @type {number} */
     this.totalEpisodesQuantity = totalEpisodesQuantity;
   }
+
+  toObject() {
+    return {
+      title: this.title,
+      website: this.website,
+      author: {
+        name: this.author.name,
+        email: this.author.email
+      },
+      description: this.description,
+      lastPublishDate: this.lastPublishDate,
+      logo: this.logo,
+      feedRSSUrl: this.feedRSSUrl,
+      totalEpisodesQuantity: this.totalEpisodesQuantity,
+    }
+  }
 }
