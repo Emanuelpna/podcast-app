@@ -1,3 +1,4 @@
+import { colors } from '../../../styles/colors';
 import * as S from './styles';
 
 export function Input({
@@ -16,6 +17,7 @@ export function Input({
       placeholder={placeholder}
       autoComplete={autoComplete}
       onChangeText={onChangeText}
+      textColor={colors.text.main}
     />
   );
 }
