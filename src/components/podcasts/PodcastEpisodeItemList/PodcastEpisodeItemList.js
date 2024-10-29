@@ -58,7 +58,7 @@ export function PodcastEpisodeItemList({
           justifyContent: 'center',
         }}>
         <IconButton
-          size={14}
+          size={32}
           onButtonPress={() => onEpisodePlay(episode.id)}
           icon={() => (
             <FontAwesome6
