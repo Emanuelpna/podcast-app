@@ -40,8 +40,6 @@ export function DiscoveryPage({ navigation }) {
 
   return (
     <Layout>
-      <SearchBar placeholder="Buscar um podcast por nome" />
-
       <PageTitle>Últimos Episódios</PageTitle>
 
       <FlatList
