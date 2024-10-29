@@ -18,11 +18,11 @@ export class PodcastChannelRepository {
   }
 
   async getSubscribedChannels() {
-    return this._newDB.getAllItems(DatabaseCollectionNames.SUBSCRIBED_PODCASTS)
+    return this._newDB.getAllItems(DatabaseCollectionNames.SUBSCRIBED_PODCASTS, 'title')
   }
 
   /**
-   * @param {PodcastChannel} channel 
+   * @param {PodcastChannel} channel
    */
   async subscribeToChannel(channel) {
     const channelWithTitle = await this._newDB.searchByField(DatabaseCollectionNames.SUBSCRIBED_PODCASTS, "title", channel.title)
