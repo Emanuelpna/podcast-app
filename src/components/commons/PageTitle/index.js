@@ -8,8 +8,16 @@ export const Container = styled.View`
   margin-bottom: 28px;
 `;
 
+export const ContentWrapper = styled.View`
+  flex-wrap: nowrap;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 8px;
+  padding-right: 12px;
+`;
+
 export const Title = styled.Text`
-  margin-bottom: 8px;
   color: ${colors.text.main};
   font-size: ${fonts.fontSize['2xl']};
   font-weight: ${fonts.fontWeight.bold};

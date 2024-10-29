@@ -1,12 +1,17 @@
 import { View } from 'react-native';
-import { Divider } from 'react-native-paper';
 
 import * as S from './index';
 
-export function PageTitle({ children }) {
+export function PageTitle({ children, rightSideSlot }) {
   return (
     <S.Container>
-      <S.Title>{children}</S.Title>
+      <S.ContentWrapper>
+        <S.Title>{children}</S.Title>
+
+        <View>
+          {rightSideSlot}
+        </View>
+      </S.ContentWrapper>
 
       <S.Divider />
     </S.Container>
