@@ -1,3 +1,4 @@
+import { colors } from '../../../styles/colors';
 import * as S from './styles';
 
 export function IconButton({
@@ -12,10 +13,12 @@ export function IconButton({
     <S.IconButton
       mode={mode}
       size={size}
-      icon={icon}
       disabled={isDisabled}
       isHollowed={isHollowed}
       onPress={onButtonPress}
-    />
+      containerColor={colors.accent.main}
+    >
+      {icon}
+    </S.IconButton>
   );
 }
