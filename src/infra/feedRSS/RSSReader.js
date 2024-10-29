@@ -43,8 +43,7 @@ export class RSSReader {
       episodes.length
     );
 
-    const mostRecentEpisodes = Array.from(episodes)
-      .slice(0, 100)
+    const podcastEpisodes = Array.from(episodes)
       .map((episode) => {
         const episodeDuration = episode['itunes:duration'];
 
@@ -67,6 +66,6 @@ export class RSSReader {
         );
       });
 
-    return { podcastChannel, mostRecentEpisodes };
+    return { podcastChannel, podcastEpisodes };
   }
 }

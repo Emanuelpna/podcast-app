@@ -13,7 +13,7 @@ export function useFetchRSSFeed(feedUrl) {
 
   /** @type {[PodcastChannel, React.Dispatch<PodcastChannel>]} state */
   const [channel, setChannel] = useState();
-   /** @type {[PodcastEpisode[], React.Dispatch<PodcastEpisode[]>]} state */
+  /** @type {[PodcastEpisode[], React.Dispatch<PodcastEpisode[]>]} state */
   const [mostRecentEpisodes, setMostRecentEpisodes] = useState();
 
   useEffect(() => {
@@ -25,7 +25,7 @@ export function useFetchRSSFeed(feedUrl) {
       .then((xml) => reader.mapXMLDataToModel(xml, feedUrl))
       .then((podcastData) => {
         setChannel(podcastData.podcastChannel);
-        setMostRecentEpisodes(podcastData.mostRecentEpisodes);
+        setMostRecentEpisodes(podcastData.podcastEpisodes);
       })
       .finally(() => {
         setIsLoading(false);
