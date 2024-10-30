@@ -4,7 +4,6 @@ import { FontAwesome6 } from '@expo/vector-icons';
 
 import { Navigations } from '../../../data/Navigations';
 import { podcastChannelRepository } from '../../../data/repositories';
-import { usePodcastSearch } from '../../../data/hooks/podcast/usePodcastSearch';
 
 import { useTrackPlayer } from '../../../infra/trackPlayer/useTrackPlayer';
 
@@ -15,7 +14,6 @@ import { IconButton } from '../../commons/IconButton/IconButton';
 import { MiniPlayer } from '../../player/MiniPlayer/MiniPlayer';
 
 import { PodcastChannelCard } from '../../podcasts/PodcastChannelCard/PodcastChannelCard';
-import { PodcastSubscriptionModal } from '../../podcasts/PodcastSubscriptionModal/PodcastSubscriptionModal';
 
 import * as S from './style';
 import { colors } from '../../../styles/colors';
@@ -116,17 +114,6 @@ export function SubscribesPage({ navigation }) {
         onOpenPlayerPage={goToPlayerPage}
         onTogglePlayPause={togglePlayPause}
       />
-
-      {/* <PodcastSubscriptionModal
-        podcastSearchResults={podcastSearchResults}
-        isVisible={showSubscribeModal}
-        onCloseModal={hideModal}
-        onFeedRSSFetch={fetchFeedRSS}
-        onChannelSubscribe={(channel) => {
-          subscribeToChannel(channel)
-          hideModal()
-        }}
-      /> */}
     </Layout>
   );
 }
