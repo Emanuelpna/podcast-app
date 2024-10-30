@@ -23,7 +23,6 @@ import { colors } from '../../../styles/colors';
 export function SubscribesPage({ navigation }) {
   const [refreshing, setRefreshing] = useState(false);
   const [subscribedPodcasts, setSubscribedPodcasts] = useState([])
-  const [showSubscribeModal, setShowSubscribeModal] = useState(false)
 
   const {
     isPlaying,
@@ -32,12 +31,6 @@ export function SubscribesPage({ navigation }) {
     pause,
     loadTrackIntoPlayer
   } = useTrackPlayer();
-
-  const {
-    podcastSearchResults,
-    fetchFeedRSS,
-    subscribeToChannel
-  } = usePodcastSearch(fetchSubscribedChannels)
 
   function goToPodcastFeedPage(channel) {
     Navigations.navigateToPodcastFeedPage(navigation, channel);
@@ -52,12 +45,8 @@ export function SubscribesPage({ navigation }) {
     );
   }
 
-  function showModal() {
-    setShowSubscribeModal(true)
-  }
-
-  function hideModal() {
-    setShowSubscribeModal(false)
+  function openSubscriptionModal() {
+    Navigations.navigateToPodcastSubscriptionModal(navigation)
   }
 
   function togglePlayPause() {
@@ -88,7 +77,7 @@ export function SubscribesPage({ navigation }) {
           size={26}
           isHollowed
           mode="default"
-          onButtonPress={showModal}
+          onButtonPress={openSubscriptionModal}
           icon={() => (
             <FontAwesome6
               size={26}
@@ -128,7 +117,7 @@ export function SubscribesPage({ navigation }) {
         onTogglePlayPause={togglePlayPause}
       />
 
-      <PodcastSubscriptionModal
+      {/* <PodcastSubscriptionModal
         podcastSearchResults={podcastSearchResults}
         isVisible={showSubscribeModal}
         onCloseModal={hideModal}
@@ -137,7 +126,7 @@ export function SubscribesPage({ navigation }) {
           subscribeToChannel(channel)
           hideModal()
         }}
-      />
+      /> */}
     </Layout>
   );
 }
