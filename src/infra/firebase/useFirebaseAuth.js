@@ -57,6 +57,12 @@ export function useFirebaseAuth(navigation) {
     setLoading(false);
   }
 
+  async function doLogout() {
+    const isLoggedOut = await FirebaseRepository.logout()
+
+    return isLoggedOut
+  }
+
   return {
     email,
     setEmail,
@@ -65,5 +71,6 @@ export function useFirebaseAuth(navigation) {
     isLoading,
     message,
     tryLogin,
+    doLogout
   };
 }

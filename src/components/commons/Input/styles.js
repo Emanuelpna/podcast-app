@@ -6,6 +6,6 @@ import { colors } from '../../../styles/colors'
 export const Input = styled(PaperTextInput)`
   flex: 1;
   margin: 6px;
-
+  min-height: 50px;
   background-color: ${colors.background[800]};
 `;

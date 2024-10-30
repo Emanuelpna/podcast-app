@@ -1,4 +1,4 @@
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "firebase/auth";
 
 import { app } from './config/firebaseConfig';
 
@@ -17,6 +17,18 @@ export class FirebaseRepository {
     auth.onAuthStateChanged(function (user) {
       onUserStateChange(!!user);
     });
+  }
+
+  static async logout() {
+    try {
+
+      signOut(auth)
+
+      return true
+    } catch (error) {
+      console.error('Unable to logout from account');
+      return false
+    }
   }
 
   static async signIn(email, password) {

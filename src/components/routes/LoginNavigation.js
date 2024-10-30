@@ -12,7 +12,7 @@ export function LoginNavigation() {
   const { userIsLoggedIn } = useUserIsLoggedIn();
 
   return (
-    <Stack.Navigator initialRouteName="LoginPage"  screenOptions={{ headerShown: false }}>
+    <Stack.Navigator initialRouteName="LoginPage" screenOptions={{ headerShown: false }}>
       {userIsLoggedIn ? (
         <Stack.Screen name="BaseNavigation" component={BaseNavigation} />
       ) : (

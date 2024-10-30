@@ -7,7 +7,6 @@ import { PodcastChannelRepository } from '../../../data/repositories/PodcastChan
 import { useTrackPlayer } from '../../../infra/trackPlayer/useTrackPlayer';
 
 import { Layout } from '../../commons/Layout/Layout';
-import { SearchBar } from '../../commons/SearchBar/SearchBar';
 import { PageTitle } from '../../commons/PageTitle/PageTitle';
 
 import { MiniPlayer } from '../../player/MiniPlayer/MiniPlayer';

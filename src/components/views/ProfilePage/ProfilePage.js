@@ -7,11 +7,14 @@ import { Card } from '../../commons/Card/Card';
 import { Button } from '../../commons/Button/Button';
 import { Layout } from '../../commons/Layout/Layout';
 
-import { colors } from '../../../styles/colors';
+import { useFirebaseAuth } from '../../../infra/firebase/useFirebaseAuth';
 
 import * as S from './styles';
+import { colors } from '../../../styles/colors';
 
 export function ProfilePage({ navigation }) {
+  const { doLogout } = useFirebaseAuth(navigation)
+
   return (
     <Layout>
       <S.UserContainer>
@@ -66,7 +69,7 @@ export function ProfilePage({ navigation }) {
               )}
             />
           )}
-          onPress={() => navigation.navigate('PlaylistsPage')}>
+          onPress={doLogout}>
           <Text>Sair</Text>
         </Button>
       </View>
