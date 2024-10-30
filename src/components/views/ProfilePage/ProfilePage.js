@@ -2,7 +2,7 @@ import { View, Text } from 'react-native';
 import { Avatar } from 'react-native-paper';
 import { Icon } from 'react-native-paper';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import { Card } from '../../commons/Card/Card';
 import { Button } from '../../commons/Button/Button';

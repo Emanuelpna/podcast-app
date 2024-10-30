@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { FlatList } from 'react-native';
-import { FontAwesome6 } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import { Navigations } from '../../../data/Navigations';
 import { podcastChannelRepository } from '../../../data/repositories';
@@ -77,10 +77,10 @@ export function SubscribesPage({ navigation }) {
           mode="default"
           onButtonPress={openSubscriptionModal}
           icon={() => (
-            <FontAwesome6
+            <MaterialCommunityIcons
               size={26}
               color={colors.text[300]}
-              name='plus-square'
+              name='view-grid-plus-outline'
             />
           )}
         />
