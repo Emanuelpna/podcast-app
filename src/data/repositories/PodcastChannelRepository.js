@@ -27,7 +27,7 @@ export class PodcastChannelRepository {
   async subscribeToChannel(channel) {
     const channelWithTitle = await this._newDB.searchByField(DatabaseCollectionNames.SUBSCRIBED_PODCASTS, "title", channel.title)
 
-    if (channelWithTitle) {
+    if (channelWithTitle.length > 0) {
       console.error("Channel is already subscribed")
       return null
     }

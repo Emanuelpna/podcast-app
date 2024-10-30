@@ -1,5 +1,5 @@
 
-import { getFirestore, collection, addDoc, query, where, getDocs, orderBy } from "firebase/firestore";
+import { getFirestore, collection, doc, addDoc, deleteDoc, query, where, getDocs, orderBy } from "firebase/firestore";
 
 import { Database } from '../../../data/protocols/Database'
 
@@ -26,11 +26,9 @@ export class FirestoreDatabase extends Database {
 
     const querySnapshot = await getDocs(collectionQuery)
 
-    if (querySnapshot.empty()) return []
+    if (querySnapshot.empty) return []
 
-    const document = querySnapshot.docs[0]
-
-    return document.data()
+    return querySnapshot.docs.map(doc => doc.data())
   }
 
   async getItemDetails(collectionName, id) {
@@ -46,7 +44,7 @@ export class FirestoreDatabase extends Database {
 
     const querySnapshot = await getDocs(collectionQuery)
 
-    if (querySnapshot.empty()) return null
+    if (querySnapshot.empty) return null
 
     return querySnapshot.docs.map(doc => doc.data())
   }
@@ -64,7 +62,7 @@ export class FirestoreDatabase extends Database {
 
     const querySnapshot = await getDocs(collectionQuery)
 
-    if (querySnapshot.empty()) return []
+    if (querySnapshot.empty) return []
 
     return querySnapshot.docs.map(doc => doc.data())
   }
@@ -85,6 +83,25 @@ export class FirestoreDatabase extends Database {
       return document
     } catch (error) {
       console.log("Error adding document with FirestoreDatabase: ", error);
+      throw error
+    }
+  }
+
+  async removeItem(collectionName, id) {
+    try {
+      const user = FirebaseRepository.getUser();
+
+      if (!user) throw new Error('You must be logged in to use Cloud DB');
+
+      const item = await this.getItemDetails(collectionName, id)
+
+      if (!item) throw new Error("Document don't exist")
+
+      if (user.uid === item.userId) throw new Error("Document couldn't be deleted")
+
+      return await deleteDoc(doc(db, collectionName, id))
+    } catch (error) {
+      console.log("Error deleting document with FirestoreDatabase: ", error);
       throw error
     }
   }

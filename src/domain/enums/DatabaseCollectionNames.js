@@ -1,3 +1,6 @@
+const databasePrefix = "@podcast-app:"
+
 export const DatabaseCollectionNames = {
-    SUBSCRIBED_PODCASTS: 'subscribed_podcasts'
+  SYNC_QUEUE: `${databasePrefix}:sync_queue`,
+  SUBSCRIBED_PODCASTS: `${databasePrefix}:subscribed_podcasts`,
 }

@@ -18,4 +18,8 @@ export class Database {
   async insertItem(collectionName, data) {
     throw new Error('Implemente esse método na classe filha')
   }
+
+  async removeItem(collectionName, id) {
+    throw new Error('Implemente esse método na classe filha')
+  }
 }
