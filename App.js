@@ -16,6 +16,8 @@ import { FirebaseAuthProvider } from './src/infra/firebase/useUserIsLoggedIn';
 
 import { LoginNavigation } from './src/components/routes/LoginNavigation';
 
+import { colors } from './src/styles/colors';
+
 export default function App() {
   useFonts({
     Sintony_700Bold,
@@ -28,7 +30,12 @@ export default function App() {
     <FirebaseAuthProvider>
       <PaperProvider>
         <TrackPlayerProvider>
-          <NavigationContainer>
+          <NavigationContainer theme={{
+            colors: {
+              background: colors.background[900],
+            }
+          }}
+          >
             <LoginNavigation />
             <StatusBar style="light" />
           </NavigationContainer>

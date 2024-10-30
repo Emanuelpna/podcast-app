@@ -15,7 +15,7 @@ export const colors = {
     950: '#0c0c0e',
   },
   background: {
-    main: '#0f0e12',
+    main: '#0D0D0D',
     50: '#f1f1f4',
     100: '#e4e2e9',
     200: '#c9c5d3',

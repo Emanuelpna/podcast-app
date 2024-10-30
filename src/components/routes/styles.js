@@ -18,11 +18,10 @@ export const tabOptionsStyle = {
   tabBarActiveTintColor: colors.primary[400],
   tabBarInactiveTintColor: colors.text[400],
   tabBarStyle: {
-    height: 60,
-    padding: 6,
+    height: 68,
+    paddingBottom: 8,
     elevation: 4,
-    borderTopColor: colors.background[800],
-    backgroundColor: colors.background[900],
+    backgroundColor: colors.background.main
   },
   tabBarLabelStyle: {
     fontFamily: fonts.fontFamily.heading,
