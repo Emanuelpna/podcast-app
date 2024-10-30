@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 
-import { useTimeToToPrettySecondsString } from '../../../data/hooks/useTimeToToPrettySecondsString';
+import { useTimeToToPrettySecondsString } from '../../../data/hooks/commons/useTimeToToPrettySecondsString';
 
 import { IconButton } from '../../commons/IconButton/IconButton';
 

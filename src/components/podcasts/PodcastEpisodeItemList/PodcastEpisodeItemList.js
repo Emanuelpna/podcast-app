@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { Menu, Divider } from 'react-native-paper';
 
-import { useTimeToToPrettySecondsString } from '../../../data/hooks/useTimeToToPrettySecondsString';
+import { useTimeToToPrettySecondsString } from '../../../data/hooks/commons/useTimeToToPrettySecondsString';
 
 import { IconButton } from '../../commons/IconButton/IconButton';
 

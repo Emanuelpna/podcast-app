@@ -2,7 +2,7 @@ import { Text, View } from 'react-native';
 import Feather from '@expo/vector-icons/Feather';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 
-import { useDateToPrettyString } from '../../../data/hooks/useDateToPrettyString';
+import { useDateToPrettyString } from '../../../data/hooks/commons/useDateToPrettyString';
 
 import { Button } from '../../commons/Button/Button';
 import { IconButton } from '../../commons/IconButton/IconButton';

@@ -2,7 +2,7 @@ import { View } from 'react-native';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 
 import { Navigations } from '../../../data/Navigations';
-import { useTimeToToPrettySecondsString } from '../../../data/hooks/useTimeToToPrettySecondsString';
+import { useTimeToToPrettySecondsString } from '../../../data/hooks/commons/useTimeToToPrettySecondsString';
 
 import { useTrackPlayer } from '../../../infra/trackPlayer/useTrackPlayer';
 
