@@ -1,7 +1,7 @@
 export class Navigations {
   static navigateToPodcastSubscriptionModal(navigation) {
     navigation.navigate('BaseNavigation', {
-      title: 'PodcastSubscriptionModal',
+      screen: 'PodcastSubscriptionModal',
     });
   }
 
@@ -22,7 +22,7 @@ export class Navigations {
       screen: 'PodcastFeedPage',
       params: {
         title: channel.title,
-        podcastChannelUrl: channel.feedRSSUrl,
+        podcastChannel: channel
       },
     });
   }

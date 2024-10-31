@@ -3,7 +3,6 @@ import { View, FlatList } from 'react-native';
 
 import { Navigations } from '../../../data/Navigations';
 
-import { useFetchRSSFeed } from '../../../infra/feedRSS/useFetchRSSFeed';
 import { useTrackPlayer } from '../../../infra/trackPlayer/useTrackPlayer';
 
 import { PodcastChannelBio } from '../../podcasts/PodcastChannelBio/PodcastChannelBio';
@@ -11,14 +10,18 @@ import { PodcastEpisodeCard } from '../../podcasts/PodcastEpisodeCard/PodcastEpi
 
 import { Layout } from '../../commons/Layout/Layout';
 import { Loading } from '../../commons/Loading/Loading';
+import { useSubscribedPodcastsFetch } from '../../../data/hooks/podcast/useSubscribedPodcastsFetch';
 
 export function PodcastFeedPage({ route, navigation }) {
-  const { podcastChannelUrl } = route.params;
+  const { podcastChannel } = route.params;
 
   const podcastEpisodesListRef = useRef(null)
 
-  const { channel, mostRecentEpisodes, isLoading } =
-    useFetchRSSFeed(podcastChannelUrl);
+  const {
+    episodesFromChannel,
+    isFetchingEpisodes,
+    fetchEpisodesFromChannel
+  } = useSubscribedPodcastsFetch()
 
   const { loadTrackIntoPlayer } = useTrackPlayer();
 
@@ -26,7 +29,7 @@ export function PodcastFeedPage({ route, navigation }) {
     Navigations.navigateToPlayerPage(
       navigation,
       loadTrackIntoPlayer,
-      channel,
+      podcastChannel,
       episode
     );
   }
@@ -34,37 +37,46 @@ export function PodcastFeedPage({ route, navigation }) {
   function openEpisodePage(episodeId) {
     Navigations.navigateToPodcastEpisodePage(
       navigation,
-      channel,
+      podcastChannel,
       getEpisodeByID(episodeId)
     );
   }
 
   function getEpisodeByID(id) {
-    return mostRecentEpisodes.find((episode) => episode.id === id);
+    return episodesFromChannel.find((episode) => episode.id === id);
   }
 
   useEffect(() => {
     if (podcastEpisodesListRef.current === null) return
 
     podcastEpisodesListRef.current.scrollToOffset({ animated: true, offset: 0 });
-  }, [mostRecentEpisodes])
+  }, [episodesFromChannel])
 
-  if (isLoading || !channel) return <Loading />;
+  useEffect(() => {
+    if (!podcastChannel?.id) {
+      Navigations.navigateToSubscribePage(navigation)
+      return
+    }
+
+    fetchEpisodesFromChannel(podcastChannel.id)
+  }, [])
+
+  if (isFetchingEpisodes || !podcastChannel) return <Loading />;
 
   return (
     <Layout>
-      <PodcastChannelBio channel={channel} />
+      <PodcastChannelBio channel={podcastChannel} />
 
       <View style={{ height: 50 }}></View>
 
       <FlatList
         ref={podcastEpisodesListRef}
-        data={mostRecentEpisodes}
+        data={episodesFromChannel}
         contentContainerStyle={{ gap: 16 }}
         keyExtractor={(item) => item.id}
         renderItem={({ item: episode }) => (
           <PodcastEpisodeCard
-            channel={channel}
+            channel={podcastChannel}
             episode={episode}
             onEpisodePlay={() => playPodcastEpisode(episode)}
             onOpenEpisodePage={() => openEpisodePage(episode.id)}

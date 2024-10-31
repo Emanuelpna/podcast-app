@@ -9,16 +9,20 @@ export const SubscribedPodcastsProvider = ({ children }) => {
   const [subscribedPodcasts, setSubscribedPodcasts] = useState([]);
   const [isFetchingSubscribedPodcasts, setIsFetchingSubscribedPodcasts] = useState(false);
 
-  useEffect(() => {
-
-  }, []);
+  const [episodesFromChannel, setEpisodesFromChannel] = useState([]);
+  const [isFetchingEpisodes, setIsFetchingEpisodes] = useState(false);
 
   return (
     <SubscribedPodcastsContext.Provider value={{
       subscribedPodcasts,
       setSubscribedPodcasts,
       isFetchingSubscribedPodcasts,
-      setIsFetchingSubscribedPodcasts
+      setIsFetchingSubscribedPodcasts,
+
+      episodesFromChannel,
+      setEpisodesFromChannel,
+      isFetchingEpisodes,
+      setIsFetchingEpisodes
     }}>
       {children}
     </SubscribedPodcastsContext.Provider>
@@ -30,7 +34,12 @@ export function useSubscribedPodcastsFetch() {
     subscribedPodcasts,
     setSubscribedPodcasts,
     isFetchingSubscribedPodcasts,
-    setIsFetchingSubscribedPodcasts
+    setIsFetchingSubscribedPodcasts,
+
+    episodesFromChannel,
+    setEpisodesFromChannel,
+    isFetchingEpisodes,
+    setIsFetchingEpisodes
   } = useContext(SubscribedPodcastsContext)
 
 
@@ -46,11 +55,30 @@ export function useSubscribedPodcastsFetch() {
       })
   }
 
+  function fetchEpisodesFromChannel(channelId) {
+    setIsFetchingEpisodes(true)
+
+    podcastChannelRepository.getSavedEpisodesBySubscribedChannel(channelId)
+      .then((data) =>
+        setEpisodesFromChannel(data)
+      )
+      .finally(() => {
+        setIsFetchingEpisodes(false)
+      })
+  }
+
   useEffect(() => {
     fetchSubscribedChannels()
   }, [])
 
-  return { isFetchingSubscribedPodcasts, subscribedPodcasts, fetchSubscribedChannels }
+  return {
+    isFetchingSubscribedPodcasts,
+    subscribedPodcasts,
+    isFetchingEpisodes,
+    episodesFromChannel,
+    fetchSubscribedChannels,
+    fetchEpisodesFromChannel
+  }
 }
 
 export default SubscribedPodcastsContext;

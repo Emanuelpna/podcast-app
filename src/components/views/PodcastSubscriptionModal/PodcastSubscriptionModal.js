@@ -4,6 +4,7 @@ import { FontAwesome6 } from '@expo/vector-icons';
 import { Divider } from 'react-native-paper';
 
 import { Input } from '../../commons/Input/Input';
+import { Loading } from '../../commons/Loading/Loading';
 import { IconButton } from '../../commons/IconButton/IconButton';
 
 import { PodcastChannelItemList } from '../../podcasts/PodcastChannelItemList/PodcastChannelItemList';
@@ -31,6 +32,7 @@ export function PodcastSubscriptionModal({ navigation }) {
   } = useSubscribedPodcastsFetch()
 
   const {
+    isSearching,
     podcastSearchResults,
     fetchFeedRSS,
     subscribeToChannel
@@ -53,26 +55,13 @@ export function PodcastSubscriptionModal({ navigation }) {
     // doChannelSearch(podcastSearch)
   }
 
-  async function onChannelSubscribe(podcastChannel) {
-    await subscribeToChannel(podcastChannel)
+  async function onChannelSubscribe(podcastChannel, podcastEpisodes) {
+    await subscribeToChannel(podcastChannel, podcastEpisodes)
 
     return setPodcastSearch('')
   }
 
   return (
-    // <Portal>
-    //   <Modal
-    //     visible={isVisible}
-    //     onDismiss={onCloseModalCallback}
-    //     contentContainerStyle={{
-    //       height: '80%',
-    //       flexDirection: 'column',
-    //       justifyContent: 'space-between',
-    //       padding: 16,
-    //       marginHorizontal: 16,
-    //       backgroundColor: colors.background[900],
-    //     }}
-    //   >
     <>
 
       <View style={{
@@ -105,20 +94,24 @@ export function PodcastSubscriptionModal({ navigation }) {
 
       <Divider style={{ marginVertical: 12 }} />
 
-      <FlatList
-        data={podcastSearchResults.sort((a, b) =>
-          a.title.localeCompare(b.title)
-        )}
-        keyExtractor={(item) => item.podcastChannel.website}
-        renderItem={({ item }) => (
-          <PodcastChannelItemList
-            channel={item.podcastChannel}
-            onChannelSubscribe={onChannelSubscribe}
+      {isSearching ?
+        <Loading /> : (
+          <FlatList
+            data={podcastSearchResults.sort((a, b) =>
+              a.title.localeCompare(b.title)
+            )}
+
+            keyExtractor={(item) => item.podcastChannel.website}
+            renderItem={({ item }) => (
+              <PodcastChannelItemList
+                channel={item.podcastChannel}
+                episodes={item.podcastEpisodes}
+                onChannelSubscribe={onChannelSubscribe}
+              />
+            )}
           />
-        )}
-      />
+        )
+      }
     </>
-    //   </Modal>
-    // </Portal>
   )
 }

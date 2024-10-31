@@ -8,8 +8,25 @@ export class SubscriptionService {
     this._podcastChannelRepository = podcastChannelRepository;
   }
 
-  async subscribeAndBulkSaveEpisodes(podcastChannel) {
-    return await this._podcastChannelRepository.subscribeToChannel(podcastChannel)
+  async subscribeAndBulkSaveEpisodes(podcastChannel, podcastEpisodes) {
+    console.log('Started saving channel and episodes');
+
+    let subscribedChannel
+
+    try {
+      subscribedChannel = await this._podcastChannelRepository.subscribeToChannel(podcastChannel)
+    } catch (error) { }
+
+    console.log('Finished saving channel: ', subscribedChannel);
+
+    console.log('Starting saving episodes');
+
+    this._podcastChannelRepository.saveEpisodesFromSubscribedChannel(subscribedChannel, podcastEpisodes)
+      .then(() => {
+        console.log('Finished saving episodes');
+      })
+
+    return subscribedChannel
   }
 
   async fetchFeedRSS(feedUrl) {

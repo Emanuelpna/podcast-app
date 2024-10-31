@@ -21,22 +21,8 @@ export class PodcastChannelRepository {
     return this._newDB.getAllItems(DatabaseCollectionNames.SUBSCRIBED_PODCASTS, 'title')
   }
 
-  /**
-   * @param {PodcastChannel} channel
-   */
-  async subscribeToChannel(channel) {
-    const channelWithTitle = await this._newDB.searchByField(DatabaseCollectionNames.SUBSCRIBED_PODCASTS, "title", channel.title)
-
-    if (channelWithTitle.length > 0) {
-      console.error("Channel is already subscribed")
-      return null
-    }
-
-    const channelToSubscribe = {
-      ...channel.toObject(),
-    }
-
-    return await this._newDB.insertItem(DatabaseCollectionNames.SUBSCRIBED_PODCASTS, channelToSubscribe)
+  async getSavedEpisodesBySubscribedChannel(channelId) {
+    return this._newDB.searchByField(DatabaseCollectionNames.SUBSCRIBED_PODCAST_EPISODES, 'channelId', channelId)
   }
 
   getChannelById(channelId) {
@@ -49,6 +35,58 @@ export class PodcastChannelRepository {
     return this._db.downloadedPodcastEpisodes.find(
       (episode) => episode.id === episodeId
     );
+  }
+
+  /**
+   * @param {PodcastChannel} channel
+   */
+  async subscribeToChannel(channel) {
+    const channelWithTitle = await this._newDB.searchByField(DatabaseCollectionNames.SUBSCRIBED_PODCASTS, "title", channel.title)
+
+    if (channelWithTitle.length > 0) {
+      console.error("Channel is already subscribed")
+      return channelWithTitle[0]
+    }
+
+    const channelToSubscribe = {
+      ...channel.toObject(),
+    }
+
+    return await this._newDB.insertItem(DatabaseCollectionNames.SUBSCRIBED_PODCASTS, channelToSubscribe)
+  }
+
+  /**
+ * @param {PodcastChannel} channel
+ * @param {PodcastEpisode[]} episodes
+ */
+  async saveEpisodesFromSubscribedChannel(channel, episodes) {
+    for await (const episode of episodes) {
+      console.log('salvando o episódio: ', episode.title);
+
+      const episodeWithTitle = await this._newDB.searchByField(
+        DatabaseCollectionNames.SUBSCRIBED_PODCAST_EPISODES,
+        "title",
+        episode.title
+      )
+
+      if (episodeWithTitle.length > 0) {
+        console.error("Episode is already saved")
+        continue
+      }
+
+      console.log('episódio ainda não está no banco');
+
+      const episodeToSave = {
+        ...episode.toObject(),
+        channelId: channel.id,
+      }
+
+      await this._newDB.insertItem(DatabaseCollectionNames.SUBSCRIBED_PODCAST_EPISODES, episodeToSave)
+
+      console.log('episódio salvo com sucesso');
+
+      continue
+    }
   }
 }
 

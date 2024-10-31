@@ -5,6 +5,7 @@ import { SubscriptionService } from "../../services/SubscriptionService"
 const subscriptionService = new SubscriptionService()
 
 export function usePodcastSearch(onPodcastSubscribe) {
+  const [isSearching, setIsSearching] = useState(false)
   const [podcastSearchResults, setPodcastSearchResults] = useState([])
 
   async function fetchFeedRSS(feedURL) {
@@ -17,9 +18,11 @@ export function usePodcastSearch(onPodcastSubscribe) {
     }
   }
 
-  async function subscribeToChannel(podcastChannel) {
+  async function subscribeToChannel(podcastChannel, podcastEpisodes) {
+    setIsSearching(true)
+
     try {
-      const result = await subscriptionService.subscribeAndBulkSaveEpisodes(podcastChannel)
+      const result = await subscriptionService.subscribeAndBulkSaveEpisodes(podcastChannel, podcastEpisodes)
 
       onPodcastSubscribe()
 
@@ -28,8 +31,9 @@ export function usePodcastSearch(onPodcastSubscribe) {
       return []
     } finally {
       setPodcastSearchResults([])
+      setIsSearching(false)
     }
   }
 
-  return { podcastSearchResults, fetchFeedRSS, subscribeToChannel }
+  return { isSearching, podcastSearchResults, fetchFeedRSS, subscribeToChannel }
 }
