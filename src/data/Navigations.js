@@ -1,14 +1,19 @@
 export class Navigations {
   static navigateToPodcastSubscriptionModal(navigation) {
-    navigation.navigate('PodcastSubscriptionModal', {
+    navigation.navigate('BaseNavigation', {
       title: 'PodcastSubscriptionModal',
     });
+  }
 
+  static navigateToSubscribePage(navigation) {
+    navigation.navigate('TabsNavigation', {
+      screen: 'SubscribesPage'
+    });
   }
 
   static navigateToDownloadsPage(navigation) {
-    navigation.navigate('DownloadsPage', {
-      title: 'Downloads',
+    navigation.navigate('TabsNavigation', {
+      screen: 'DownloadsPage'
     });
   }
 

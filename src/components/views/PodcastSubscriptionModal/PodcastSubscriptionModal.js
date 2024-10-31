@@ -1,15 +1,18 @@
 import { useState } from 'react';
 import { FlatList, View } from 'react-native';
 import { FontAwesome6 } from '@expo/vector-icons';
-import { Divider, Modal, Portal, Text } from 'react-native-paper';
+import { Divider } from 'react-native-paper';
 
 import { Input } from '../../commons/Input/Input';
 import { IconButton } from '../../commons/IconButton/IconButton';
 
 import { PodcastChannelItemList } from '../../podcasts/PodcastChannelItemList/PodcastChannelItemList';
 
-import { colors } from '../../../styles/colors';
+import { Navigations } from '../../../data/Navigations';
 import { usePodcastSearch } from '../../../data/hooks/podcast/usePodcastSearch';
+import { useSubscribedPodcastsFetch } from '../../../data/hooks/podcast/useSubscribedPodcastsFetch';
+
+import { colors } from '../../../styles/colors';
 
 function isURL(value) {
   try {
@@ -20,14 +23,22 @@ function isURL(value) {
   }
 }
 
-export function PodcastSubscriptionModal() {
-  const [podcastSearch, setPodcastSearch] = useState('https://anchor.fm/s/f1a7ac64/podcast/rss')
+export function PodcastSubscriptionModal({ navigation }) {
+  const [podcastSearch, setPodcastSearch] = useState('')
+
+  const {
+    fetchSubscribedChannels
+  } = useSubscribedPodcastsFetch()
 
   const {
     podcastSearchResults,
     fetchFeedRSS,
     subscribeToChannel
-  } = usePodcastSearch(() => { })
+  } = usePodcastSearch(() => {
+    fetchSubscribedChannels()
+
+    Navigations.navigateToSubscribePage(navigation)
+  })
 
   function onSearchSubmit() {
     if (!podcastSearch) return

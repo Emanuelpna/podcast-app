@@ -1,9 +1,8 @@
-import { useEffect, useState } from 'react';
 import { FlatList } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import { Navigations } from '../../../data/Navigations';
-import { podcastChannelRepository } from '../../../data/repositories';
+import { useSubscribedPodcastsFetch } from '../../../data/hooks/podcast/useSubscribedPodcastsFetch';
 
 import { useTrackPlayer } from '../../../infra/trackPlayer/useTrackPlayer';
 
@@ -19,9 +18,6 @@ import * as S from './style';
 import { colors } from '../../../styles/colors';
 
 export function SubscribesPage({ navigation }) {
-  const [refreshing, setRefreshing] = useState(false);
-  const [subscribedPodcasts, setSubscribedPodcasts] = useState([])
-
   const {
     isPlaying,
     currentTrack,
@@ -29,6 +25,12 @@ export function SubscribesPage({ navigation }) {
     pause,
     loadTrackIntoPlayer
   } = useTrackPlayer();
+
+  const {
+    subscribedPodcasts,
+    isFetchingSubscribedPodcasts,
+    fetchSubscribedChannels
+  } = useSubscribedPodcastsFetch()
 
   function goToPodcastFeedPage(channel) {
     Navigations.navigateToPodcastFeedPage(navigation, channel);
@@ -52,22 +54,6 @@ export function SubscribesPage({ navigation }) {
     else play();
   }
 
-  function fetchSubscribedChannels() {
-    setRefreshing(true)
-
-    podcastChannelRepository.getSubscribedChannels()
-      .then((data) =>
-        setSubscribedPodcasts(data)
-      )
-      .finally(() => {
-        setRefreshing(false)
-      })
-  }
-
-  useEffect(() => {
-    fetchSubscribedChannels()
-  }, [])
-
   return (
     <Layout>
       <PageTitle rightSideSlot={
@@ -89,7 +75,7 @@ export function SubscribesPage({ navigation }) {
       </PageTitle>
 
       <FlatList
-        refreshing={refreshing}
+        refreshing={isFetchingSubscribedPodcasts}
         onRefresh={fetchSubscribedChannels}
         numColumns={3}
         data={subscribedPodcasts}

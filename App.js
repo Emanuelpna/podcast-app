@@ -11,6 +11,8 @@ import {
   Poppins_700Bold,
 } from '@expo-google-fonts/poppins';
 
+import { SubscribedPodcastsProvider } from './src/data/hooks/podcast/useSubscribedPodcastsFetch';
+
 import { TrackPlayerProvider } from './src/infra/trackPlayer/useTrackPlayer';
 import { FirebaseAuthProvider } from './src/infra/firebase/useUserIsLoggedIn';
 
@@ -28,19 +30,21 @@ export default function App() {
 
   return (
     <FirebaseAuthProvider>
-      <PaperProvider>
-        <TrackPlayerProvider>
-          <NavigationContainer theme={{
-            colors: {
-              background: colors.background[900],
-            }
-          }}
-          >
-            <LoginNavigation />
-            <StatusBar style="light" />
-          </NavigationContainer>
-        </TrackPlayerProvider>
-      </PaperProvider>
+      <SubscribedPodcastsProvider>
+        <PaperProvider>
+          <TrackPlayerProvider>
+            <NavigationContainer theme={{
+              colors: {
+                background: colors.background[900],
+              }
+            }}
+            >
+              <LoginNavigation />
+              <StatusBar style="light" />
+            </NavigationContainer>
+          </TrackPlayerProvider>
+        </PaperProvider>
+      </SubscribedPodcastsProvider>
     </FirebaseAuthProvider>
   );
 }
