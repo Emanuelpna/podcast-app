@@ -60,7 +60,9 @@ export class AsyncStorageDatabase extends Database {
 
       const newList = collectionList.concat(data)
 
-      return await this._db.setItem(collectionName, JSON.stringify(newList));
+      await this._db.setItem(collectionName, JSON.stringify(newList));
+
+      return data
     } catch (error) {
       console.error("Error adding document with AsyncStorageDatabase: ", error);
       throw error
