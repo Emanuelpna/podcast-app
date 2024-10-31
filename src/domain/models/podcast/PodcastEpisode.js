@@ -5,7 +5,7 @@ export class PodcastEpisode {
    */
   constructor(
     id,
-    channelId, 
+    channelId,
     title,
     link,
     description,
@@ -32,5 +32,23 @@ export class PodcastEpisode {
     this.duration = duration;
     /** @type {PodcastAudioFile} */
     this.audioFile = audioFile;
+  }
+
+  toObject() {
+    return {
+      id: this.id,
+      channelId: this.channelId,
+      title: this.title,
+      link: this.link,
+      description: this.description,
+      publishDate: this.publishDate,
+      banner: this.banner,
+      duration: this.duration,
+      audioFile: {
+        url: this.audioFile.url,
+        length: this.audioFile.length,
+        fileType: this.audioFile.fileType,
+      },
+    }
   }
 }
