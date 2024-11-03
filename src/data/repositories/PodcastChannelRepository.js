@@ -25,10 +25,36 @@ export class PodcastChannelRepository {
     return this._newDB.searchByField(DatabaseCollectionNames.SUBSCRIBED_PODCAST_EPISODES, 'channelId', channelId)
   }
 
-  getChannelById(channelId) {
-    return this._db.subscribedPodcasts.find(
-      (channel) => channel.website === channelId
-    );
+  async getLatestsEpisodesFromSubscribedChannels() {
+    const latestsEpisodes = []
+
+    const channels = await this._newDB.getAllItems(DatabaseCollectionNames.SUBSCRIBED_PODCASTS)
+
+    const daysPastToLookForEpisodes = 7 // one week
+
+    const daysToMilisseconds = 24 * 60 * 60 * 1000
+
+    const today = new Date()
+    const oldReferenceDate = new Date(today.getTime() - daysPastToLookForEpisodes * daysToMilisseconds);
+
+    for await (const channel of channels) {
+      const episodes = await this._newDB.searchByField(DatabaseCollectionNames.SUBSCRIBED_PODCAST_EPISODES, 'channelId', channel.id)
+
+      for await (const episode of episodes) {
+        const episodePublishDate = new Date(episode.publishDate)
+
+        if (!episodePublishDate) continue
+
+        if (episodePublishDate.getTime() >= oldReferenceDate.getTime())
+          latestsEpisodes.push({ channel, episode })
+      }
+    }
+
+    return latestsEpisodes.sort((a, b) => new Date(b.episode.publishDate) - new Date(a.episode.publishDate))
+  }
+
+  async getChannelById(channelId) {
+    return await this._newDB.getItemDetails(DatabaseCollectionNames.SUBSCRIBED_PODCASTS, channelId)
   }
 
   getEpisodeById(episodeId) {

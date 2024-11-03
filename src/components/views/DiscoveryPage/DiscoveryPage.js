@@ -1,23 +1,25 @@
 import { FlatList } from 'react-native';
 
-import { database } from '../../../data/_fakeDB';
 import { Navigations } from '../../../data/Navigations';
-import { PodcastChannelRepository } from '../../../data/repositories/PodcastChannelRepository';
+import { useLatestsEpisodes } from '../../../data/hooks/podcast/useLatestsEpisodes';
 
 import { useTrackPlayer } from '../../../infra/trackPlayer/useTrackPlayer';
 
 import { Layout } from '../../commons/Layout/Layout';
 import { PageTitle } from '../../commons/PageTitle/PageTitle';
-
 import { MiniPlayer } from '../../player/MiniPlayer/MiniPlayer';
-
 import { PodcastEpisodeCard } from '../../podcasts/PodcastEpisodeCard/PodcastEpisodeCard';
 
-const podcastChannelRepository = new PodcastChannelRepository(database);
 
 export function DiscoveryPage({ navigation }) {
   const { isPlaying, currentTrack, play, pause, loadTrackIntoPlayer } =
     useTrackPlayer();
+
+  const {
+    isSearching,
+    latestsEpisodes,
+    getLatestsEpisodes,
+  } = useLatestsEpisodes()
 
   function playPodcastEpisode(channel, episode) {
     Navigations.navigateToPlayerPage(
@@ -42,23 +44,19 @@ export function DiscoveryPage({ navigation }) {
       <PageTitle>Últimos Episódios</PageTitle>
 
       <FlatList
-        data={database.newPodcastEpisodes}
-        contentContainerStyle={{ gap: 4 }}
-        keyExtractor={(episode) => episode.id}
-        renderItem={({ item: episode }) => {
-          const channel = podcastChannelRepository.getChannelById(
-            episode.channelId
-          );
-
-          return (
-            <PodcastEpisodeCard
-              episode={episode}
-              channel={channel}
-              onEpisodePlay={() => playPodcastEpisode(channel, episode)}
-              onOpenEpisodePage={() => openEpisodePage(channel, episode)}
-            />
-          );
-        }}
+        refreshing={isSearching}
+        onRefresh={getLatestsEpisodes}
+        data={latestsEpisodes}
+        contentContainerStyle={{ gap: 12 }}
+        keyExtractor={(item) => item.episode.id}
+        renderItem={({ item }) => (
+          <PodcastEpisodeCard
+            episode={item.episode}
+            channel={item.channel}
+            onEpisodePlay={() => playPodcastEpisode(item.channel, item.episode)}
+            onOpenEpisodePage={() => openEpisodePage(item.channel, item.episode)}
+          />
+        )}
       />
 
       <MiniPlayer

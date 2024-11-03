@@ -13,7 +13,7 @@ export class FirestoreDatabase extends Database {
     this._db = getFirestore(app)
   }
 
-  async searchByField(collectionName, documentField, documentValue) {
+  async searchByField(collectionName, documentField, documentValue, sortBy) {
     const user = FirebaseRepository.getUser();
 
     if (!user) throw new Error('You must be logged in to use Cloud DB');
@@ -22,7 +22,8 @@ export class FirestoreDatabase extends Database {
       const collectionQuery = query(
         collection(this._db, collectionName),
         where("userId", "==", user.uid),
-        where(documentField, "==", documentValue)
+        where(documentField, "==", documentValue),
+        orderBy(sortBy)
       )
 
       const querySnapshot = await getDocs(collectionQuery)
@@ -44,19 +45,25 @@ export class FirestoreDatabase extends Database {
 
     if (!user) throw new Error('You must be logged in to use Cloud DB');
 
-    const collectionQuery = query(
-      collection(this._db, collectionName),
-      where("userId", "==", user.uid),
-      where("id", "==", id),
-    );
+    try {
+      const collectionQuery = query(
+        collection(this._db, collectionName),
+        where("userId", "==", user.uid),
+        where("id", "==", id),
+      );
 
-    const querySnapshot = await getDocs(collectionQuery)
+      const querySnapshot = await getDocs(collectionQuery)
 
-    if (querySnapshot.empty) return null
+      if (querySnapshot.empty) return null
 
-    return querySnapshot.docs.map(doc => {
-      return { ...doc.data(), documentId: doc.id }
-    })[0]
+      return querySnapshot.docs.map(doc => {
+        return { ...doc.data(), documentId: doc.id }
+      })[0]
+    } catch (error) {
+      console.log(error);
+
+      return null
+    }
   }
 
   async getAllItems(collectionName, sortBy) {

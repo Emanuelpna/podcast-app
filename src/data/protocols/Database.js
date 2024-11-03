@@ -3,7 +3,7 @@ export class Database {
     this._db = null;
   }
 
-  async searchByField(collectionName, documentField, documentValue) {
+  async searchByField(collectionName, documentField, documentValue, sortBy) {
     throw new Error('Implemente esse método na classe filha')
   }
 

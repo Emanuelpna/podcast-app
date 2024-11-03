@@ -29,7 +29,6 @@ export class SyncedDatabase extends Database {
       result = await this._localDB.searchByField(collectionName, documentField, documentValue)
     }
 
-
     return result
   }
 

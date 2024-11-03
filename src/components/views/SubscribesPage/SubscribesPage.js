@@ -1,8 +1,8 @@
-import { useEffect } from 'react';
 import { FlatList } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import { Navigations } from '../../../data/Navigations';
+import { useOnScreenFocus } from '../../../data/hooks/navigation/useOnScreenFocus';
 import { useSubscribedPodcastsFetch } from '../../../data/hooks/podcast/useSubscribedPodcastsFetch';
 
 import { useTrackPlayer } from '../../../infra/trackPlayer/useTrackPlayer';
@@ -40,6 +40,8 @@ export function SubscribesPage({ navigation }) {
     fetchSubscribedChannels
   } = useSubscribedPodcastsFetch()
 
+  useOnScreenFocus(navigation, fetchSubscribedChannels)
+
   function goToPodcastFeedPage(channel) {
     Navigations.navigateToPodcastFeedPage(navigation, channel);
   }
@@ -61,12 +63,6 @@ export function SubscribesPage({ navigation }) {
     if (isPlaying) pause();
     else play();
   }
-
-  useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', fetchSubscribedChannels);
-
-    return unsubscribe;
-  }, [navigation]);
 
   return (
     <Layout>
