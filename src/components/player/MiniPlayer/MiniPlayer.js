@@ -70,14 +70,14 @@ export function MiniPlayer({
         <IconButton
           size={14}
           onButtonPress={onTogglePlayPause}
-          icon={() => (
+          icon={
             <FontAwesome6
               size={14}
               color={colors.text[300]}
               name={isPlaying ? 'pause' : 'play'}
               style={{ marginLeft: isPlaying ? 0 : 2 }}
             />
-          )}
+          }
         />
       </View>
     </S.Container>

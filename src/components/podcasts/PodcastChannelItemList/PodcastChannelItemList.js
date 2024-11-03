@@ -23,13 +23,13 @@ export function PodcastChannelItemList({ channel, episodes, onChannelSubscribe }
         <IconButton
           size={48}
           onButtonPress={() => onChannelSubscribe(channel, episodes)}
-          icon={() => (
+          icon={
             <FontAwesome6
               name="plus"
               size={24}
               color={colors.text[300]}
             />
-          )}
+          }
         />
       </S.ButtonWrapper>
     </S.Container>

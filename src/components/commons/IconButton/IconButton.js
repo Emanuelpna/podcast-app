@@ -18,7 +18,9 @@ export function IconButton({
       onPress={onButtonPress}
       containerColor={colors.accent.main}
     >
-      {icon}
+      <>
+        {icon}
+      </>
     </S.IconButton>
   );
 }

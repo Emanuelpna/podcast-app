@@ -13,10 +13,7 @@ const Stack = createStackNavigator();
 
 export function BaseNavigation() {
   return (
-    <Stack.Navigator
-      initialRouteName="TabsNavigation"
-
-    >
+    <Stack.Navigator initialRouteName="TabsNavigation">
       <Stack.Screen
         name="PlayerPage"
         component={PlayerPage}

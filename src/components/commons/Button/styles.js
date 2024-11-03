@@ -1,15 +1,14 @@
 import styled, { css } from 'styled-components/native';
 import { Text as NativeText } from 'react-native';
-import { Button } from 'react-native-paper';
+import { TouchableRipple } from 'react-native-paper';
 
 import { colors } from '../../../styles/colors';
 import { fonts } from '../../../styles/fonts';
 
-export const Container = styled(Button)`
-  padding: 0 6px;  
-  margin: 12px 0;
-  line-height: 1.2;
-  border-radius: 12px;
+export const Wrapper = styled(TouchableRipple)`
+  margin-top: 12px;
+  padding: 10px 18px;
+  border-radius: 16px;
   text-transform: initial;
   background-color: ${colors.primary.main};
 
@@ -28,8 +27,23 @@ export const Container = styled(Button)`
   }
 `;
 
+export const Container = styled.View`
+  flex-wrap: nowrap;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+`
+
+export const IconWrapper = styled.View`
+  margin-bottom: 2px;
+`
+
 export const Text = styled(NativeText)`
+  text-align: center;
   color: ${colors.text[900]};
+  font-size: ${fonts.fontSize.base};
+  line-height: ${fonts.fontSize.xl};
   font-family: ${fonts.fontFamily.body};
   font-weight: ${fonts.fontWeight.normal};
 `;

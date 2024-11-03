@@ -45,9 +45,9 @@ export function PodcastEpisodeCard({
           }}>
           <Button
             onPress={() => onEpisodePlay(episode.id)}
-            icon={() => (
-              <FontAwesome6 name="play" size={14} color={colors.text[800]} />
-            )}>
+            icon={
+              <FontAwesome6 name="play-circle" size={18} color={colors.text[800]} />
+            }>
             <Text>Play</Text>
           </Button>
 
@@ -56,24 +56,25 @@ export function PodcastEpisodeCard({
               flexWrap: 'nowrap',
               flexDirection: 'row',
               alignItems: 'center',
-              justifyContent: 'space-between',
+              justifyContent: 'flex-end',
+              gap: 12
             }}>
             <IconButton
               size={20}
               isHollowed
               onButtonPress={() => onEpisodePlay(episode.id)}
-              icon={({ color }) => (
-                <Feather name="download-cloud" size={18} color={color} />
-              )}
+              icon={
+                <Feather name="download-cloud" size={18} color={colors.text.main} />
+              }
             />
 
             <IconButton
               size={20}
               isHollowed
               onButtonPress={() => onEpisodePlay(episode.id)}
-              icon={({ color }) => (
-                <FontAwesome6 name="heart" size={18} color={color} />
-              )}
+              icon={
+                <FontAwesome6 name="heart" size={18} color={colors.text.main} />
+              }
             />
           </View>
         </View>

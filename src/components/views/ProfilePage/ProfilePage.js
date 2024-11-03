@@ -61,7 +61,7 @@ export function ProfilePage({ navigation }) {
 
         <View style={{ marginBottom: 16 }}>
           <Button
-            icon={() => (
+            icon={
               <Icon
                 size={18}
                 source={() => (
@@ -72,13 +72,13 @@ export function ProfilePage({ navigation }) {
                   />
                 )}
               />
-            )}
+            }
             onPress={() => syncDBRepository.bulkSyncData()}>
             <Text>Sincronizar dados com a Cloud</Text>
           </Button>
 
           <Button
-            icon={() => (
+            icon={
               <Icon
                 size={18}
                 source={() => (
@@ -89,7 +89,7 @@ export function ProfilePage({ navigation }) {
                   />
                 )}
               />
-            )}
+            }
             onPress={doLogout}>
             <Text>Sair da conta</Text>
           </Button>

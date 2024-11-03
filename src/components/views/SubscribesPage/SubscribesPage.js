@@ -76,13 +76,13 @@ export function SubscribesPage({ navigation }) {
           isHollowed
           mode="default"
           onButtonPress={openSubscriptionModal}
-          icon={() => (
+          icon={
             <MaterialCommunityIcons
               size={26}
               color={colors.text[300]}
               name='view-grid-plus-outline'
             />
-          )}
+          }
         />
       }>
         Inscrições {`(${subscribedPodcasts.length})`}

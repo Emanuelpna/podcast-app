@@ -46,18 +46,18 @@ export function PlayerControls({
         <IconButton
           isHollowed
           mode="default"
-          icon={({ color }) => (
-            <S.Icon name="backward-step" size={22} color={color} />
-          )}
+          icon={
+            <S.Icon name="backward-step" size={22} color={colors.text.main} />
+          }
           onButtonPress={() => console.log('Pressed')}
         />
 
         <IconButton
           isHollowed
           mode="default"
-          icon={({ color }) => (
-            <S.Icon name="rotate-left" size={22} color={color} />
-          )}
+          icon={
+            <S.Icon name="rotate-left" size={22} color={colors.text.main} />
+          }
           onButtonPress={() => console.log('Pressed')}
         />
 
@@ -68,11 +68,11 @@ export function PlayerControls({
           onButtonPress={onTogglePlayPause}
           icon={({ color }) =>
             isLoading ? (
-              <ActivityIndicator animating={true} color={color} />
+              <ActivityIndicator animating={true} color={colors.text.main} />
             ) : (
               <S.Icon
                 size={32}
-                color={color}
+                color={colors.text.main}
                 name={isPlaying ? 'pause' : 'play'}
                 style={{ marginLeft: isPlaying ? 0 : 4 }}
               />
@@ -83,18 +83,18 @@ export function PlayerControls({
         <IconButton
           isHollowed
           mode="default"
-          icon={({ color }) => (
-            <S.Icon name="rotate-right" size={22} color={color} />
-          )}
+          icon={
+            <S.Icon name="rotate-right" size={22} color={colors.text.main} />
+          }
           onButtonPress={() => console.log('Pressed')}
         />
 
         <IconButton
           isHollowed
           mode="default"
-          icon={({ color }) => (
-            <S.Icon name="forward-step" size={22} color={color} />
-          )}
+          icon={
+            <S.Icon name="forward-step" size={22} color={colors.text.main} />
+          }
           onButtonPress={() => console.log('Pressed')}
         />
       </S.ControlsButtonsRow>
@@ -103,34 +103,34 @@ export function PlayerControls({
         <IconButton
           isHollowed
           mode="default"
-          icon={({ color }) => (
-            <S.Icon name="shuffle" size={22} color={color} />
-          )}
+          icon={
+            <S.Icon name="shuffle" size={22} color={colors.text.main} />
+          }
           onButtonPress={() => console.log('Pressed')}
         />
 
         <IconButton
           isHollowed
           mode="default"
-          icon={({ color }) => <S.Icon name="list" size={22} color={color} />}
+          icon={({ color }) => <S.Icon name="list" size={22} color={colors.text.main} />}
           onButtonPress={() => console.log('Pressed')}
         />
 
         <IconButton
           isHollowed
           mode="default"
-          icon={({ color }) => (
-            <S.Icon name="gauge-high" size={22} color={color} />
-          )}
+          icon={
+            <S.Icon name="gauge-high" size={22} color={colors.text.main} />
+          }
           onButtonPress={() => console.log('Pressed')}
         />
 
         <IconButton
           isHollowed
           mode="default"
-          icon={({ color }) => (
-            <S.Icon name="heart" solid={false} size={22} color={color} />
-          )}
+          icon={
+            <S.Icon name="heart" solid={false} size={22} color={colors.text.main} />
+          }
           onButtonPress={() => console.log('Pressed')}
         />
       </S.ControlsButtonsRow>

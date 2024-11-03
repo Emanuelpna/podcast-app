@@ -1,8 +1,9 @@
 import styled, { css } from 'styled-components/native';
+import { TouchableRipple } from 'react-native-paper';
 
 import { colors } from '../../../styles/colors';
 
-export const IconButton = styled.Pressable`
+export const IconButton = styled(TouchableRipple)`
   background-color: ${colors.accent.main};
   align-items: center;
   justify-content: center;

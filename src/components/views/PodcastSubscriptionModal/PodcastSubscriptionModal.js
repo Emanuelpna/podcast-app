@@ -81,13 +81,13 @@ export function PodcastSubscriptionModal({ navigation }) {
         <IconButton
           size={48}
           onButtonPress={onSearchSubmit}
-          icon={() => (
+          icon={
             <FontAwesome6
               name="magnifying-glass"
               size={14}
               color={colors.text[300]}
             />
-          )}
+          }
         />
       </View>
 

@@ -26,6 +26,7 @@ export function TabsNavigation() {
           ),
         }}
       />
+
       <Tab.Screen
         name="DiscoveryPage"
         component={DiscoveryPage}
@@ -36,6 +37,7 @@ export function TabsNavigation() {
           ),
         }}
       />
+
       <Tab.Screen
         name="DownloadsPage"
         component={DownloadsPage}
@@ -46,6 +48,7 @@ export function TabsNavigation() {
           ),
         }}
       />
+
       <Tab.Screen
         name="ProfileNavigation"
         component={ProfileNavigation}

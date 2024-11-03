@@ -37,7 +37,7 @@ export function PodcastEpisodeItemList({
 
       <View
         style={{
-          width: '50%',
+          width: '58%',
           justifyContent: 'center',
         }}>
         <S.EpisodeTitle numberOfLines={2}>
@@ -51,25 +51,25 @@ export function PodcastEpisodeItemList({
 
       <View
         style={{
-          width: '30%',
+          width: '20%',
           flexWrap: 'nowrap',
           flexDirection: 'row',
           alignItems: 'center',
-          justifyContent: 'center',
+          justifyContent: 'flex-end',
+          gap: 12
         }}>
+
         <IconButton
           size={32}
           onButtonPress={() => onEpisodePlay(episode.id)}
-          icon={() => (
+          icon={
             <FontAwesome6
               name="play"
               size={14}
               color={colors.text[300]}
-              style={{
-                marginLeft: 3,
-              }}
+              style={{ marginLeft: 2 }}
             />
-          )}
+          }
         />
 
         <Menu
@@ -81,16 +81,16 @@ export function PodcastEpisodeItemList({
               size={14}
               isHollowed
               onButtonPress={openMenu}
-              icon={({ color }) => (
+              icon={
                 <FontAwesome6
                   name="ellipsis-vertical"
                   size={14}
-                  color={color}
+                  color={colors.text.main}
                   style={{
                     marginLeft: 3,
                   }}
                 />
-              )}
+              }
             />
           }>
           <Menu.Item

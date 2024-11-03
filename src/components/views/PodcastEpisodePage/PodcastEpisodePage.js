@@ -60,18 +60,16 @@ export function PodcastEpisodePage({ route, navigation }) {
           </View>
 
           <IconButton
-            size={32}
+            size={56}
             onButtonPress={playPodcastEpisode}
-            icon={() => (
+            icon={
               <FontAwesome6
                 name="play"
                 size={24}
                 color={colors.text[300]}
-                style={{
-                  marginLeft: 3,
-                }}
+                style={{ marginLeft: 3 }}
               />
-            )}
+            }
           />
         </View>
 
