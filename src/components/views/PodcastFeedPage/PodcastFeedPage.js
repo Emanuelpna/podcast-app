@@ -2,6 +2,8 @@ import { useEffect, useRef } from 'react';
 import { View, FlatList } from 'react-native';
 
 import { Navigations } from '../../../data/Navigations';
+import { podcastChannelRepository } from '../../../data/repositories';
+import { useSubscribedPodcastsFetch } from '../../../data/hooks/podcast/useSubscribedPodcastsFetch';
 
 import { useTrackPlayer } from '../../../infra/trackPlayer/useTrackPlayer';
 
@@ -10,7 +12,6 @@ import { PodcastEpisodeCard } from '../../podcasts/PodcastEpisodeCard/PodcastEpi
 
 import { Layout } from '../../commons/Layout/Layout';
 import { Loading } from '../../commons/Loading/Loading';
-import { useSubscribedPodcastsFetch } from '../../../data/hooks/podcast/useSubscribedPodcastsFetch';
 
 export function PodcastFeedPage({ route, navigation }) {
   const { podcastChannel } = route.params;
@@ -65,7 +66,14 @@ export function PodcastFeedPage({ route, navigation }) {
 
   return (
     <Layout>
-      <PodcastChannelBio channel={podcastChannel} />
+      <PodcastChannelBio
+        channel={podcastChannel}
+        onUnsubscribeFromChannel={async channelId => {
+          await podcastChannelRepository.unsubscribeFromChannel(channelId)
+
+          Navigations.navigateToSubscribePage(navigation)
+        }}
+      />
 
       <View style={{ height: 50 }}></View>
 

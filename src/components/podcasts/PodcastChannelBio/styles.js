@@ -3,6 +3,37 @@ import styled from 'styled-components/native';
 import { fonts } from '../../../styles/fonts';
 import { colors } from '../../../styles/colors';
 
+export const HeaderActionContainer = styled.View`
+  flex-wrap: nowrap;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+`
+
+export const HeaderActionbarTitleContainer = styled.View`
+  padding: 12px;
+  flex-wrap: nowrap;
+  flex-direction: row;
+  gap: 12px;
+`
+
+export const HeaderTitleWrapper = styled.View`
+  flex: 1;
+  padding-top: 4px;
+  padding-right: 12px;
+  width: auto;
+  flex-wrap: nowrap;
+  flex-direction: column;
+  gap: 4px;
+`
+
+export const HeaderActionsWrapper = styled.View`
+  /* justify-content: flex-end;
+  flex-direction: row; */
+  padding-top: 8px 0;
+  gap: 12px;
+`
+
 export const Title = styled.Text`
   line-height: 22;
   color: ${colors.text.main};

@@ -1,25 +1,27 @@
 import { useState } from 'react';
-import { Text, Linking, Image, View, Pressable } from 'react-native';
-import { Avatar } from 'react-native-paper';
+import { Linking, Image, View, Pressable } from 'react-native';
+import { Avatar, Button as PaperButton, Dialog, Portal, PaperProvider, Text } from 'react-native-paper';
 
 import { Card } from '../../commons/Card/Card';
+import { Button } from '../../commons/Button/Button';
 
 import * as S from './styles';
+import { colors } from '../../../styles/colors';
 
-export function PodcastChannelBio({ channel }) {
+export function PodcastChannelBio({ channel, onUnsubscribeFromChannel }) {
   const [isDescriptionTruncated, setIsDescriptionTruncated] = useState(true);
   const [isDescriptionOverflowing, setIsDescriptionOverflowing] =
     useState(false);
+  const [visible, setVisible] = useState(false);
+
+  const showDialog = () => setVisible(true);
+
+  const hideDialog = () => setVisible(false);
 
   return (
     <Card>
-      <View
-        style={{
-          padding: 12,
-          flexWrap: 'nowrap',
-          flexDirection: 'row',
-          gap: 12,
-        }}>
+
+      <S.HeaderActionbarTitleContainer>
         {channel?.logo ? (
           <Image
             source={{ uri: channel.logo }}
@@ -34,19 +36,11 @@ export function PodcastChannelBio({ channel }) {
           <Avatar.Text
             size={72}
             label={channel.title}
-            style={{ borderRadius: 6, alignSelf: 'center' }}
+            style={{ borderRadius: 6, alignSelf: 'flex-start' }}
           />
         )}
 
-        <View
-          style={{
-            paddingTop: 4,
-            paddingRight: 12,
-            width: '80%',
-            flexWrap: 'nowrap',
-            flexDirection: 'column',
-            gap: 4,
-          }}>
+        <S.HeaderTitleWrapper>
           <S.Title>{channel.title}</S.Title>
 
           <Pressable onPress={() => Linking.openURL(channel.website)}>
@@ -54,10 +48,10 @@ export function PodcastChannelBio({ channel }) {
           </Pressable>
 
           <S.EpisodeCount>{channel.totalEpisodesQuantity} Episódios</S.EpisodeCount>
-        </View>
-      </View>
+        </S.HeaderTitleWrapper>
+      </S.HeaderActionbarTitleContainer>
 
-      <View style={{ padding: 12, paddingTop: 0 }}>
+      <View style={{ padding: 4, paddingTop: 0 }}>
         <S.Description
           ellipsizeMode="tail"
           numberOfLines={isDescriptionTruncated ? 4 : Number.MAX_SAFE_INTEGER}
@@ -85,6 +79,26 @@ export function PodcastChannelBio({ channel }) {
           </Pressable>
         )}
       </View>
+
+      <S.HeaderActionsWrapper>
+        <Button onPress={showDialog}>
+          <Text>Inscrito</Text>
+        </Button>
+      </S.HeaderActionsWrapper>
+
+      <Portal>
+        <Dialog visible={visible} onDismiss={hideDialog}>
+          <Dialog.Title>Cancelar inscrição no canal?</Dialog.Title>
+          <Dialog.Content>
+            <Text variant="bodyMedium">Você irá remover a inscrição no canal {channel.title}</Text>
+          </Dialog.Content>
+
+          <Dialog.Actions>
+            <PaperButton onPress={hideDialog}>Cancelar</PaperButton>
+            <PaperButton onPress={() => onUnsubscribeFromChannel(channel.id)}>Desinscrever</PaperButton>
+          </Dialog.Actions>
+        </Dialog>
+      </Portal>
     </Card>
   );
 }

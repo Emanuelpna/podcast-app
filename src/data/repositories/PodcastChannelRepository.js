@@ -88,6 +88,17 @@ export class PodcastChannelRepository {
       continue
     }
   }
+
+  async unsubscribeFromChannel(channelId) {
+    const episodesFromChannel = await this.getSavedEpisodesBySubscribedChannel(channelId)
+
+    if (episodesFromChannel !== null)
+      for await (const episode of episodesFromChannel) {
+        await this._newDB.removeItem(DatabaseCollectionNames.SUBSCRIBED_PODCAST_EPISODES, episode.id)
+      }
+
+    return await this._newDB.removeItem(DatabaseCollectionNames.SUBSCRIBED_PODCASTS, channelId)
+  }
 }
 
 export const podcastChannelRepository = new PodcastChannelRepository();
