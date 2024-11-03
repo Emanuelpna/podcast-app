@@ -9,7 +9,4 @@ const firebaseConfig = {
   appId: process.env.EXPO_PUBLIC_FIREBASE_APP_ID,
 };
 
-// if (!firebase.apps.length) {
 export const app = initializeApp(firebaseConfig);
-// }
-
