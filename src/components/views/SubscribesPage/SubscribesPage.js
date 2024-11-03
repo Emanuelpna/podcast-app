@@ -2,6 +2,7 @@ import { FlatList } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import { Navigations } from '../../../data/Navigations';
+import { SubscriptionService } from '../../../data/services/SubscriptionService'
 import { useOnScreenFocus } from '../../../data/hooks/navigation/useOnScreenFocus';
 import { useSubscribedPodcastsFetch } from '../../../data/hooks/podcast/useSubscribedPodcastsFetch';
 
@@ -24,6 +25,8 @@ import { colors } from '../../../styles/colors';
  * - On refreshing subscribed channels FlatList, should fetch on web for the channels and look for new episodes not saved yet
  *
  */
+
+const subscriptionService = new SubscriptionService()
 
 export function SubscribesPage({ navigation }) {
   const {
@@ -64,6 +67,16 @@ export function SubscribesPage({ navigation }) {
     else play();
   }
 
+  async function updateChannelsData() {
+    const subscribedChannels = await fetchSubscribedChannels()
+
+    for await (const channel of subscribedChannels) {
+      const podcastData = await subscriptionService.fetchFeedRSS(channel.feedRSSUrl)
+
+      await subscriptionService.subscribeAndBulkSaveEpisodes(podcastData.podcastChannel, podcastData.podcastEpisodes)
+    }
+  }
+
   return (
     <Layout>
       <PageTitle rightSideSlot={
@@ -86,7 +99,7 @@ export function SubscribesPage({ navigation }) {
 
       <FlatList
         refreshing={isFetchingSubscribedPodcasts}
-        onRefresh={fetchSubscribedChannels}
+        onRefresh={updateChannelsData}
         numColumns={3}
         data={subscribedPodcasts}
         columnWrapperStyle={{ gap: 16 }}

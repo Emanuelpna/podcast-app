@@ -9,20 +9,16 @@ export class AsyncStorageDatabase extends Database {
     this._db = AsyncStorage;
   }
 
-  async searchByField(collectionName, documentField, documentValue, sortBy) {
+  async searchByField(collectionName, documentField, documentValue) {
     const result = await this._db.getItem(collectionName)
 
     if (!result) return null
 
     const data = JSON.parse(result)
 
-    const document = data.filter(item => item?.[documentField] === documentValue)
+    const documents = data.filter(item => item?.[documentField] === documentValue)
 
-    return document.sort((a, b) => {
-      if (!a?.[sortBy] || !b?.[sortBy]) return 0
-
-      return a[sortBy].localeCompare(b[sortBy])
-    });
+    return documents;
   }
 
   async getItemDetails(collectionName, id) {

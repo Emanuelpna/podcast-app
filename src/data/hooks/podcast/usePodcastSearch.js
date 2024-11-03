@@ -24,7 +24,7 @@ export function usePodcastSearch(onPodcastSubscribe) {
     try {
       const result = await subscriptionService.subscribeAndBulkSaveEpisodes(podcastChannel, podcastEpisodes)
 
-      onPodcastSubscribe()
+      onPodcastSubscribe?.()
 
       return result
     } catch (error) {

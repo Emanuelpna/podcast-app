@@ -11,9 +11,6 @@ export function useLatestsEpisodes() {
 
     const episodes = await podcastChannelRepository.getLatestsEpisodesFromSubscribedChannels()
 
-    console.log({ episodes: episodes.map(item => item.title) });
-
-
     setLatestsEpisodes(episodes)
 
     setIsSearching(false)

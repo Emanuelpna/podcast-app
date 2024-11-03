@@ -43,13 +43,15 @@ export function useSubscribedPodcastsFetch() {
   } = useContext(SubscribedPodcastsContext)
 
 
-  function fetchSubscribedChannels() {
+  async function fetchSubscribedChannels() {
     setIsFetchingSubscribedPodcasts(true)
 
-    podcastChannelRepository.getSubscribedChannels()
-      .then((data) =>
+    return podcastChannelRepository.getSubscribedChannels()
+      .then((data) => {
         setSubscribedPodcasts(data)
-      )
+
+        return data
+      })
       .finally(() => {
         setIsFetchingSubscribedPodcasts(false)
       })
@@ -60,7 +62,9 @@ export function useSubscribedPodcastsFetch() {
 
     podcastChannelRepository.getSavedEpisodesBySubscribedChannel(channelId)
       .then((data) =>
-        setEpisodesFromChannel(data)
+        setEpisodesFromChannel(
+          data.sort((a, b) => new Date(b.publishDate) - new Date(a.publishDate))
+        )
       )
       .finally(() => {
         setIsFetchingEpisodes(false)

@@ -13,7 +13,7 @@ export class FirestoreDatabase extends Database {
     this._db = getFirestore(app)
   }
 
-  async searchByField(collectionName, documentField, documentValue, sortBy) {
+  async searchByField(collectionName, documentField, documentValue) {
     const user = FirebaseRepository.getUser();
 
     if (!user) throw new Error('You must be logged in to use Cloud DB');
@@ -23,7 +23,6 @@ export class FirestoreDatabase extends Database {
         collection(this._db, collectionName),
         where("userId", "==", user.uid),
         where(documentField, "==", documentValue),
-        orderBy(sortBy)
       )
 
       const querySnapshot = await getDocs(collectionQuery)
@@ -75,7 +74,7 @@ export class FirestoreDatabase extends Database {
       const collectionQuery = query(
         collection(this._db, collectionName),
         where("userId", "==", user.uid),
-        orderBy(sortBy)
+        orderBy(sortBy, 'desc')
       );
 
       const querySnapshot = await getDocs(collectionQuery)
@@ -88,7 +87,7 @@ export class FirestoreDatabase extends Database {
     } catch (error) {
       console.log(error);
 
-      return []
+      throw error
     }
   }
 

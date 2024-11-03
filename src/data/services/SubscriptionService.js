@@ -17,7 +17,7 @@ export class SubscriptionService {
       subscribedChannel = await this._podcastChannelRepository.subscribeToChannel(podcastChannel)
     } catch (error) { }
 
-    console.log('Finished saving channel: ', subscribedChannel);
+    console.log('Finished saving channel: ', subscribedChannel.title);
 
     console.log('Starting saving episodes');
 
