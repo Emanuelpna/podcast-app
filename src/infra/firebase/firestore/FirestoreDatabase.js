@@ -18,17 +18,25 @@ export class FirestoreDatabase extends Database {
 
     if (!user) throw new Error('You must be logged in to use Cloud DB');
 
-    const collectionQuery = query(
-      collection(this._db, collectionName),
-      where("userId", "==", user.uid),
-      where(documentField, "==", documentValue)
-    )
+    try {
+      const collectionQuery = query(
+        collection(this._db, collectionName),
+        where("userId", "==", user.uid),
+        where(documentField, "==", documentValue)
+      )
 
-    const querySnapshot = await getDocs(collectionQuery)
+      const querySnapshot = await getDocs(collectionQuery)
 
-    if (querySnapshot.empty) return []
+      if (querySnapshot.empty) return []
 
-    return querySnapshot.docs.map(doc => doc.data())
+      return querySnapshot.docs.map(doc => {
+        return { ...doc.data(), documentId: doc.id }
+      })
+    } catch (error) {
+      console.log(error);
+
+      return []
+    }
   }
 
   async getItemDetails(collectionName, id) {
@@ -46,7 +54,9 @@ export class FirestoreDatabase extends Database {
 
     if (querySnapshot.empty) return null
 
-    return querySnapshot.docs.map(doc => doc.data())
+    return querySnapshot.docs.map(doc => {
+      return { ...doc.data(), documentId: doc.id }
+    })[0]
   }
 
   async getAllItems(collectionName, sortBy) {
@@ -54,17 +64,25 @@ export class FirestoreDatabase extends Database {
 
     if (!user) throw new Error('You must be logged in to use Cloud DB');
 
-    const collectionQuery = query(
-      collection(this._db, collectionName),
-      where("userId", "==", user.uid),
-      orderBy(sortBy)
-    );
+    try {
+      const collectionQuery = query(
+        collection(this._db, collectionName),
+        where("userId", "==", user.uid),
+        orderBy(sortBy)
+      );
 
-    const querySnapshot = await getDocs(collectionQuery)
+      const querySnapshot = await getDocs(collectionQuery)
 
-    if (querySnapshot.empty) return []
+      if (querySnapshot.empty) return []
 
-    return querySnapshot.docs.map(doc => doc.data())
+      return querySnapshot.docs.map(doc => {
+        return { ...doc.data(), documentId: doc.id }
+      })
+    } catch (error) {
+      console.log(error);
+
+      return []
+    }
   }
 
   async insertItem(collectionName, data) {
@@ -97,9 +115,9 @@ export class FirestoreDatabase extends Database {
 
       if (!item) throw new Error("Document don't exist")
 
-      if (user.uid === item.userId) throw new Error("Document couldn't be deleted")
+      if (user.uid !== item.userId) throw new Error("Document couldn't be deleted")
 
-      return await deleteDoc(doc(db, collectionName, id))
+      return await deleteDoc(doc(this._db, collectionName, item.documentId))
     } catch (error) {
       console.log("Error deleting document with FirestoreDatabase: ", error);
       throw error

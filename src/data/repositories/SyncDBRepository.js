@@ -37,7 +37,7 @@ export class SyncDBRepository {
       }
 
       if (item.action === SyncCollectionActions.DELETE_ITEM)
-        await this._cloudDB.removeItem(item.collectionName, item.data?.id)
+        await this._cloudDB.removeItem(item.collectionName, item.id)
 
       await this._localDB.removeItem(DatabaseCollectionNames.SYNC_QUEUE, item.id)
     }
