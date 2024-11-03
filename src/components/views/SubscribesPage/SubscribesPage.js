@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { FlatList } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
@@ -16,6 +17,13 @@ import { PodcastChannelCard } from '../../podcasts/PodcastChannelCard/PodcastCha
 
 import * as S from './style';
 import { colors } from '../../../styles/colors';
+
+/**
+ *
+ * TODO:
+ * - On refreshing subscribed channels FlatList, should fetch on web for the channels and look for new episodes not saved yet
+ *
+ */
 
 export function SubscribesPage({ navigation }) {
   const {
@@ -53,6 +61,12 @@ export function SubscribesPage({ navigation }) {
     if (isPlaying) pause();
     else play();
   }
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', fetchSubscribedChannels);
+
+    return unsubscribe;
+  }, [navigation]);
 
   return (
     <Layout>
