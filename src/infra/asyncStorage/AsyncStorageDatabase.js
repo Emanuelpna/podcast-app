@@ -1,4 +1,3 @@
-import { randomUUID } from 'expo-crypto'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { Database } from "../../data/protocols/Database";
@@ -55,8 +54,6 @@ export class AsyncStorageDatabase extends Database {
       const collectionData = await this._db.getItem(collectionName)
 
       const collectionList = JSON.parse(collectionData) ?? []
-
-      data.id = randomUUID()
 
       const newList = collectionList.concat(data)
 

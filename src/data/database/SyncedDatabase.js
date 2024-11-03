@@ -29,6 +29,7 @@ export class SyncedDatabase extends Database {
       result = await this._localDB.searchByField(collectionName, documentField, documentValue)
     }
 
+
     return result
   }
 
@@ -49,6 +50,9 @@ export class SyncedDatabase extends Database {
   async insertItem(collectionName, data) {
     let result = null
 
+    if (!data.id)
+      data.id = randomUUID()
+
     try {
       result = await this._localDB.insertItem(collectionName, data);
     } catch (error) {
@@ -60,7 +64,10 @@ export class SyncedDatabase extends Database {
       .catch(error => {
         console.log('Unable to insert item in CLOUD DB', error);
 
-        this._localDB.insertItem(DatabaseCollectionNames.SYNC_QUEUE, { id: randomUUID(), collectionName, data, action: SyncCollectionActions.CREATE_ITEM });
+        this._localDB.insertItem(
+          DatabaseCollectionNames.SYNC_QUEUE,
+          { id: randomUUID(), collectionName, data, action: SyncCollectionActions.CREATE_ITEM }
+        );
       })
 
     return result
@@ -70,18 +77,19 @@ export class SyncedDatabase extends Database {
     let result = null
 
     try {
-      result = await this._localDB.removeItem(collectionName, id)
-      await this._cloudDB.removeItem(collectionName, id)
+      result = await this._localDB.removeItem(collectionName, id);
     } catch (error) {
-      console.error("Unable to delete item in LOCAL DB");
-      return null
+      console.log("Unable to delete item in LOCAL DB");
     }
 
     this._cloudDB.removeItem(collectionName, id)
       .catch(error => {
         console.log('Unable to delete item in CLOUD DB', error);
 
-        this._localDB.insertItem(DatabaseCollectionNames.SYNC_QUEUE, { id: randomUUID(), collectionName, data, action: SyncCollectionActions.DELETE_ITEM });
+        this._localDB.insertItem(
+          DatabaseCollectionNames.SYNC_QUEUE,
+          { id: randomUUID(), collectionName, id, action: SyncCollectionActions.DELETE_ITEM }
+        );
       })
 
     return result
