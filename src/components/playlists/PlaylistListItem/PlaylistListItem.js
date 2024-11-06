@@ -4,7 +4,7 @@ import { Divider } from 'react-native-paper';
 
 import * as S from './styles';
 
-export function PlaylistListItem({ playlist, isFirstItem }) {
+export function PlaylistListItem({ playlist }) {
   const firstCovers = useMemo(
     () =>
       playlist.episodes
@@ -15,7 +15,7 @@ export function PlaylistListItem({ playlist, isFirstItem }) {
   );
 
   return (
-    <View style={{ flex: 1 }}>
+    <>
       <S.Container>
         <S.Title>{playlist.title}</S.Title>
 
@@ -27,6 +27,6 @@ export function PlaylistListItem({ playlist, isFirstItem }) {
       </S.Container>
 
       <Divider />
-    </View>
+    </>
   );
 }

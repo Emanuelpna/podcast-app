@@ -26,25 +26,27 @@ export function PodcastFeedPage({ route, navigation }) {
 
   const { loadTrackIntoPlayer } = useTrackPlayer();
 
-  function playPodcastEpisode(episode) {
+  function playPodcastEpisode(podcastEpisode) {
     Navigations.navigateToPlayerPage(
       navigation,
       loadTrackIntoPlayer,
       podcastChannel,
-      episode
+      podcastEpisode
     );
   }
 
-  function openEpisodePage(episodeId) {
+  function openEpisodePage(podcastEpisode) {
     Navigations.navigateToPodcastEpisodePage(
       navigation,
       podcastChannel,
-      getEpisodeByID(episodeId)
+      podcastEpisode
     );
   }
 
-  function getEpisodeByID(id) {
-    return episodesFromChannel.find((episode) => episode.id === id);
+  async function onUnsubscribeFromChannel(channelId) {
+    await podcastChannelRepository.unsubscribeFromChannel(channelId)
+
+    Navigations.navigateToSubscribePage(navigation)
   }
 
   useEffect(() => {
@@ -68,26 +70,22 @@ export function PodcastFeedPage({ route, navigation }) {
     <Layout>
       <PodcastChannelBio
         channel={podcastChannel}
-        onUnsubscribeFromChannel={async channelId => {
-          await podcastChannelRepository.unsubscribeFromChannel(channelId)
-
-          Navigations.navigateToSubscribePage(navigation)
-        }}
+        onUnsubscribeFromChannel={onUnsubscribeFromChannel}
       />
 
-      <View style={{ height: 50 }}></View>
+      <View style={{ height: 20 }}></View>
 
       <FlatList
         ref={podcastEpisodesListRef}
         data={episodesFromChannel}
         contentContainerStyle={{ gap: 16 }}
         keyExtractor={(item) => item.id}
-        renderItem={({ item: episode }) => (
+        renderItem={({ item: podcastEpisode }) => (
           <PodcastEpisodeCard
             channel={podcastChannel}
-            episode={episode}
-            onEpisodePlay={() => playPodcastEpisode(episode)}
-            onOpenEpisodePage={() => openEpisodePage(episode.id)}
+            episode={podcastEpisode}
+            onEpisodePlay={() => playPodcastEpisode(podcastEpisode)}
+            onOpenEpisodePage={() => openEpisodePage(podcastEpisode)}
           />
         )}
       />

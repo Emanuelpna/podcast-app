@@ -19,13 +19,6 @@ import { PodcastChannelCard } from '../../podcasts/PodcastChannelCard/PodcastCha
 import * as S from './style';
 import { colors } from '../../../styles/colors';
 
-/**
- *
- * TODO:
- * - On refreshing subscribed channels FlatList, should fetch on web for the channels and look for new episodes not saved yet
- *
- */
-
 const subscriptionService = new SubscriptionService()
 
 export function SubscribesPage({ navigation }) {

@@ -14,6 +14,7 @@ export const Container = styled.View`
 `;
 
 export const Title = styled.Text`
+  max-width: 50%;
   color: ${colors.primary.main};
   font-size: ${fonts.fontSize['xl']};
   font-weight: ${fonts.fontWeight.bold};
@@ -23,7 +24,7 @@ export const Title = styled.Text`
 export const CoverContainer = styled.View`
   width: 72px;
   height: 72px;
-  border-radius: 8px;  
+  border-radius: 8px;
 `;
 
 export const Cover = styled.Image`

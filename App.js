@@ -2,11 +2,12 @@ import { StatusBar } from 'expo-status-bar';
 import { PaperProvider } from 'react-native-paper';
 import { NavigationContainer } from '@react-navigation/native';
 import {
-  useFonts,
+  useFonts as useSintonyFonts,
   Sintony_400Regular,
   Sintony_700Bold,
 } from '@expo-google-fonts/sintony';
 import {
+  useFonts as usePoppinsFonts,
   Poppins_400Regular,
   Poppins_700Bold,
 } from '@expo-google-fonts/poppins';
@@ -21,9 +22,12 @@ import { LoginNavigation } from './src/components/routes/LoginNavigation';
 import { colors } from './src/styles/colors';
 
 export default function App() {
-  useFonts({
+  useSintonyFonts({
     Sintony_700Bold,
     Sintony_400Regular,
+  });
+
+  usePoppinsFonts({
     Poppins_400Regular,
     Poppins_700Bold,
   });
@@ -33,11 +37,12 @@ export default function App() {
       <SubscribedPodcastsProvider>
         <PaperProvider>
           <TrackPlayerProvider>
-            <NavigationContainer theme={{
-              colors: {
-                background: colors.background[900],
-              }
-            }}
+            <NavigationContainer
+              theme={{
+                colors: {
+                  background: colors.background[900]
+                }
+              }}
             >
               <LoginNavigation />
               <StatusBar style="light" />

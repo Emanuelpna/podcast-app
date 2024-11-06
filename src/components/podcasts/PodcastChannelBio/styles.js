@@ -28,16 +28,14 @@ export const HeaderTitleWrapper = styled.View`
 `
 
 export const HeaderActionsWrapper = styled.View`
-  /* justify-content: flex-end;
-  flex-direction: row; */
   padding-top: 8px 0;
   gap: 12px;
 `
 
 export const Title = styled.Text`
-  line-height: 22;
   color: ${colors.text.main};
   font-size: ${fonts.fontSize.base};
+  line-height: ${fonts.fontSize.base};
   font-weight: ${fonts.fontWeight.bold};
   font-family: ${fonts.fontFamily.heading};
 `;
