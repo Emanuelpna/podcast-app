@@ -1,11 +1,13 @@
-import { DatabaseCollectionNames } from "../../domain/enums/DatabaseCollectionNames";
 import { SyncCollectionActions } from "../../domain/enums/SyncCollectionActions";
+import { DatabaseCollectionNames } from "../../domain/enums/DatabaseCollectionNames";
+
 import { Database } from "../protocols/Database";
+import { LoggingService } from "../services/LoggingService";
 
 export class SyncDBRepository {
   constructor(cloudDB, localDB) {
     if (!cloudDB instanceof Database || !localDB instanceof Database)
-      throw console.error('You need to use a class that extends `/data/protocols/Database`');
+      throw LoggingService.error('You need to use a class that extends `/data/protocols/Database`');
 
     /** @type {Database} _cloudDB */
     this._cloudDB = cloudDB;

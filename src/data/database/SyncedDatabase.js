@@ -4,13 +4,14 @@ import { SyncCollectionActions } from "../../domain/enums/SyncCollectionActions"
 import { DatabaseCollectionNames } from '../../domain/enums/DatabaseCollectionNames';
 
 import { Database } from "../protocols/Database";
+import { LoggingService } from '../services/LoggingService';
 
 export class SyncedDatabase extends Database {
   constructor(cloudDB, localDB) {
     super()
 
     if (!cloudDB instanceof Database || !localDB instanceof Database)
-      throw console.error('You need to use a class that extends `/data/protocols/Database`');
+      throw LoggingService.error('You need to use a class that extends `/data/protocols/Database`');
 
     /** @type {Database} _cloudDB */
     this._cloudDB = cloudDB;
@@ -24,7 +25,7 @@ export class SyncedDatabase extends Database {
     try {
       result = await this._cloudDB.searchByField(collectionName, documentField, documentValue)
     } catch (error) {
-      console.log("Unable to fetch from CLOUD DB");
+      LoggingService.log("Unable to fetch from CLOUD DB");
 
       result = await this._localDB.searchByField(collectionName, documentField, documentValue)
     }
@@ -38,7 +39,7 @@ export class SyncedDatabase extends Database {
     try {
       result = await this._cloudDB.getAllItems(collectionName, sortBy)
     } catch (error) {
-      console.log("Unable to fetch from CLOUD DB");
+      LoggingService.log("Unable to fetch from CLOUD DB");
 
       result = await this._localDB.getAllItems(collectionName, sortBy)
     }
@@ -55,13 +56,13 @@ export class SyncedDatabase extends Database {
     try {
       result = await this._localDB.insertItem(collectionName, data);
     } catch (error) {
-      console.error("Unable to insert item in LOCAL DB");
+      LoggingService.error("Unable to insert item in LOCAL DB");
       return null
     }
 
     this._cloudDB.insertItem(collectionName, data)
       .catch(error => {
-        console.log('Unable to insert item in CLOUD DB', error);
+        LoggingService.log('Unable to insert item in CLOUD DB', error);
 
         this._localDB.insertItem(
           DatabaseCollectionNames.SYNC_QUEUE,
@@ -78,12 +79,12 @@ export class SyncedDatabase extends Database {
     try {
       result = await this._localDB.removeItem(collectionName, id);
     } catch (error) {
-      console.log("Unable to delete item in LOCAL DB");
+      LoggingService.log("Unable to delete item in LOCAL DB");
     }
 
     this._cloudDB.removeItem(collectionName, id)
       .catch(error => {
-        console.log('Unable to delete item in CLOUD DB', error);
+        LoggingService.log('Unable to delete item in CLOUD DB', error);
 
         this._localDB.insertItem(
           DatabaseCollectionNames.SYNC_QUEUE,

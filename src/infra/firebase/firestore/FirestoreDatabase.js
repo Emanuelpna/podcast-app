@@ -2,6 +2,7 @@
 import { getFirestore, collection, doc, addDoc, deleteDoc, query, where, getDocs, orderBy } from "firebase/firestore";
 
 import { Database } from '../../../data/protocols/Database'
+import { LoggingService } from "../../../data/services/LoggingService";
 
 import { app } from "../config/firebaseConfig";
 import { FirebaseRepository } from "../FirebaseRepository";
@@ -33,7 +34,7 @@ export class FirestoreDatabase extends Database {
         return { ...doc.data(), documentId: doc.id }
       })
     } catch (error) {
-      console.log(error);
+      LoggingService.log(error);
 
       return []
     }
@@ -59,7 +60,7 @@ export class FirestoreDatabase extends Database {
         return { ...doc.data(), documentId: doc.id }
       })[0]
     } catch (error) {
-      console.log(error);
+      LoggingService.log(error);
 
       return null
     }
@@ -85,7 +86,7 @@ export class FirestoreDatabase extends Database {
         return { ...doc.data(), documentId: doc.id }
       })
     } catch (error) {
-      console.log(error);
+      LoggingService.log(error);
 
       throw error
     }
@@ -106,7 +107,7 @@ export class FirestoreDatabase extends Database {
 
       return document
     } catch (error) {
-      console.log("Error adding document with FirestoreDatabase: ", error);
+      LoggingService.log("Error adding document with FirestoreDatabase: ", error);
       throw error
     }
   }
@@ -125,7 +126,7 @@ export class FirestoreDatabase extends Database {
 
       return await deleteDoc(doc(this._db, collectionName, item.documentId))
     } catch (error) {
-      console.log("Error deleting document with FirestoreDatabase: ", error);
+      LoggingService.log("Error deleting document with FirestoreDatabase: ", error);
       throw error
     }
   }

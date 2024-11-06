@@ -1,3 +1,4 @@
+import { LoggingService } from "./LoggingService";
 import { podcastChannelRepository } from "../repositories";
 
 import { RSSReader } from "../../infra/feedRSS/RSSReader";
@@ -9,7 +10,7 @@ export class SubscriptionService {
   }
 
   async subscribeAndBulkSaveEpisodes(podcastChannel, podcastEpisodes) {
-    console.log('Started saving channel and episodes');
+    LoggingService.log('Started saving channel and episodes');
 
     let subscribedChannel
 
@@ -17,13 +18,13 @@ export class SubscriptionService {
       subscribedChannel = await this._podcastChannelRepository.subscribeToChannel(podcastChannel)
     } catch (error) { }
 
-    console.log('Finished saving channel: ', subscribedChannel.title);
+    LoggingService.log('Finished saving channel: ', subscribedChannel.title);
 
-    console.log('Starting saving episodes');
+    LoggingService.log('Starting saving episodes');
 
     this._podcastChannelRepository.saveEpisodesFromSubscribedChannel(subscribedChannel, podcastEpisodes)
       .then(() => {
-        console.log('Finished saving episodes');
+        LoggingService.log('Finished saving episodes');
       })
 
     return subscribedChannel

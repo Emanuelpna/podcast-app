@@ -2,6 +2,7 @@ import { DatabaseCollectionNames } from '../../domain/enums/DatabaseCollectionNa
 
 import { database } from '../_fakeDB';
 import { Database } from '../protocols/Database'
+import { LoggingService } from '../services/LoggingService';
 
 /**
  * @typedef {import('../../domain/models/podcast/PodcastChannel').PodcastChannel} PodcastChannel
@@ -10,7 +11,7 @@ import { Database } from '../protocols/Database'
 export class PodcastChannelRepository {
   constructor(db) {
     if (!db instanceof Database)
-      throw console.error('You need to use a class that extends `/data/protocols/Database`');
+      throw LoggingService.error('You need to use a class that extends `/data/protocols/Database`');
 
     /** @type {Database} _newDB */
     this._newDB = db;
@@ -70,7 +71,7 @@ export class PodcastChannelRepository {
     const channelWithTitle = await this._newDB.searchByField(DatabaseCollectionNames.SUBSCRIBED_PODCASTS, "title", channel.title)
 
     if (channelWithTitle.length > 0) {
-      console.error("Channel is already subscribed")
+      LoggingService.error("Channel is already subscribed")
       return channelWithTitle[0]
     }
 
@@ -87,7 +88,7 @@ export class PodcastChannelRepository {
  */
   async saveEpisodesFromSubscribedChannel(channel, episodes) {
     for await (const episode of episodes) {
-      console.log('salvando o episódio: ', episode.title);
+      LoggingService.log('salvando o episódio: ', episode.title);
 
       const episodeWithTitle = await this._newDB.searchByField(
         DatabaseCollectionNames.SUBSCRIBED_PODCAST_EPISODES,
@@ -96,11 +97,11 @@ export class PodcastChannelRepository {
       )
 
       if (episodeWithTitle.length > 0) {
-        console.error("Episode is already saved")
+        LoggingService.error("Episode is already saved")
         continue
       }
 
-      console.log('episódio ainda não está no banco');
+      LoggingService.log('episódio ainda não está no banco');
 
       const episodeToSave = {
         ...episode.toObject(),
@@ -109,7 +110,7 @@ export class PodcastChannelRepository {
 
       await this._newDB.insertItem(DatabaseCollectionNames.SUBSCRIBED_PODCAST_EPISODES, episodeToSave)
 
-      console.log('episódio salvo com sucesso');
+      LoggingService.log('episódio salvo com sucesso');
 
       continue
     }

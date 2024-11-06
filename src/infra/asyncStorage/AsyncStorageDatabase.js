@@ -1,6 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { Database } from "../../data/protocols/Database";
+import { LoggingService } from '../../data/services/LoggingService';
 
 export class AsyncStorageDatabase extends Database {
   constructor() {
@@ -61,7 +62,7 @@ export class AsyncStorageDatabase extends Database {
 
       return data
     } catch (error) {
-      console.error("Error adding document with AsyncStorageDatabase: ", error);
+      LoggingService.error("Error adding document with AsyncStorageDatabase: ", error);
       throw error
     }
   }
@@ -78,7 +79,7 @@ export class AsyncStorageDatabase extends Database {
 
       return await this._db.setItem(collectionName, JSON.stringify(allItems.splice(itemIndex, 1)))
     } catch (error) {
-      console.log("Error deleting document with AsyncStorageDatabase: ", error);
+      LoggingService.log("Error deleting document with AsyncStorageDatabase: ", error);
       throw error
     }
   }
