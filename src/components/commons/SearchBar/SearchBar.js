@@ -7,6 +7,7 @@ export function SearchBar({ placeholder }) {
         elevation={2}
         placeholder={placeholder}
         inputStyle={S.inputStyles}
+        theme={S.searchbarThemeStyles}
       />
     </>
   );

@@ -15,7 +15,7 @@ export const colors = {
     950: '#0c0c0e',
   },
   background: {
-    main: '#141718',
+    main: '#19181B',
     50: '#f1f1f4',
     100: '#e4e2e9',
     200: '#c9c5d3',
@@ -25,7 +25,7 @@ export const colors = {
     600: '#5f5973',
     700: '#484356',
     800: '#302c3a',
-    900: '#18161d',
+    900: '#111014',
   },
   primary: {
     main: '#ac9ed4',

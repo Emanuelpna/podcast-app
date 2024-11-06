@@ -21,7 +21,7 @@ export const tabOptionsStyle = {
     height: 68,
     paddingBottom: 8,
     elevation: 4,
-    backgroundColor: colors.background.main
+    backgroundColor: colors.background[900]
   },
   tabBarLabelStyle: {
     fontFamily: fonts.fontFamily.heading,

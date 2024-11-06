@@ -11,7 +11,15 @@ export const Searchbar = styled(SearchbarPaper)`
 `;
 
 export const inputStyles = {
-  fontSize: 10,
+  fontSize: 12,
   color: colors.text.main,
   fontFamily: fonts.fontFamily.body,
 };
+
+
+export const searchbarThemeStyles = {
+  colors: {
+    onSurface: colors.text[400],
+    onSurfaceVariant: colors.text.main
+  }
+}
