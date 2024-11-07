@@ -24,6 +24,13 @@ Caso esteja rodando o projeto de dentro do WSL, o QR Code pode não funcionar se
 npx expo start --tunnel
 ```
 
+## Next Steps
+
+- [ ] Add feedback to download episode progress on downloads page
+- [ ] Add a toast notifications system
+- [ ] Fix Player styles and playbackObject persistance to use on AsyncStorage
+- [ ] Add iTunes or Spotify API integration on usePodcastSearch()
+
 ## TO DO
 
 - [x] Subscriptions -  Add subscribe to a channel option (a action button in subscribes page and a subscribe button on podcast channel page)
