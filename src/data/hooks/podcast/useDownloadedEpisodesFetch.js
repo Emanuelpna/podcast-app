@@ -22,19 +22,13 @@ export function useDownloadedEpisodesFetch() {
     for await (const episodeFileName of downloadedEpisodesFileNames) {
       const episodeId = episodeFileName.replace('podcast-app-', '').replace('.mp3', '')
 
-      console.log({ episodeId });
-
       /** @type {PodcastEpisode | null} episode */
       const episode = await podcastEpisodeRepository.getEpisodeDetaislById(episodeId)
-
-      console.log({ episode });
 
       if (!episode) continue
 
       /** @type {PodcastChannel | null} episode */
       const channel = await podcastChannelRepository.getChannelById(episode.channelId)
-
-      console.log({ channel });
 
       episodes.push({ episode, channel })
     }
