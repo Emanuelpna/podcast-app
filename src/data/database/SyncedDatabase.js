@@ -47,6 +47,20 @@ export class SyncedDatabase extends Database {
     return result
   }
 
+  async getItemDetails(collectionName, id) {
+    let result = null;
+
+    try {
+      result = await this._cloudDB.getItemDetails(collectionName, id)
+    } catch (error) {
+      LoggingService.log("Unable to fetch from CLOUD DB");
+
+      result = await this._localDB.getAllItems(collectionName, id)
+    }
+
+    return result
+  }
+
   async insertItem(collectionName, data) {
     let result = null
 

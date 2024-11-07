@@ -15,6 +15,7 @@ export function PodcastEpisodeItemList({
   episode,
   onOpenEpisodePage,
   onEpisodePlay,
+  onDeleteDownloadedEpisode
 }) {
   const [menuIsVisible, setMenuisVisible] = useState(false);
 
@@ -101,7 +102,7 @@ export function PodcastEpisodeItemList({
           <Divider />
           <Menu.Item
             leadingIcon="trash-can-outline"
-            onPress={() => { }}
+            onPress={() => onDeleteDownloadedEpisode()}
             title="Apagar"
           />
         </Menu>

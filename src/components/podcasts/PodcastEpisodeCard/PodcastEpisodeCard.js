@@ -15,6 +15,7 @@ export function PodcastEpisodeCard({
   episode,
   onOpenEpisodePage,
   onEpisodePlay,
+  onDownloadEpisode
 }) {
   const publishDate = useDateToPrettyString(episode.publishDate);
 
@@ -62,7 +63,7 @@ export function PodcastEpisodeCard({
             <IconButton
               size={20}
               isHollowed
-              onButtonPress={() => onEpisodePlay(episode.id)}
+              onButtonPress={() => onDownloadEpisode(episode)}
               icon={
                 <Feather name="download-cloud" size={18} color={colors.text.main} />
               }

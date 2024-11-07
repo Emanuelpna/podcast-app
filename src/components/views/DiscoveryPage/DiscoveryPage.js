@@ -2,6 +2,7 @@ import { FlatList } from 'react-native';
 
 import { Navigations } from '../../../data/Navigations';
 import { useLatestsEpisodes } from '../../../data/hooks/podcast/useLatestsEpisodes';
+import { EpisodeDownloadService } from '../../../data/services/EpisodeDownloadService';
 
 import { useTrackPlayer } from '../../../infra/trackPlayer/useTrackPlayer';
 
@@ -39,6 +40,12 @@ export function DiscoveryPage({ navigation }) {
     else play();
   }
 
+  async function downloadEpisode(episode) {
+    const episodeDownloadService = new EpisodeDownloadService()
+
+    await episodeDownloadService.startDownload(episode)
+  }
+
   return (
     <Layout>
       <PageTitle>Últimos Episódios</PageTitle>
@@ -55,6 +62,7 @@ export function DiscoveryPage({ navigation }) {
             channel={item.channel}
             onEpisodePlay={() => playPodcastEpisode(item.channel, item.episode)}
             onOpenEpisodePage={() => openEpisodePage(item.channel, item.episode)}
+            onDownloadEpisode={() => downloadEpisode(item.episode)}
           />
         )}
       />

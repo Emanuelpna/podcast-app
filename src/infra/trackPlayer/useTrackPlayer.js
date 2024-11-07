@@ -1,6 +1,8 @@
 import { createContext, useState, useContext } from 'react';
 import { Audio } from 'expo-av';
 
+import { EpisodeDownloadService } from '../../data/services/EpisodeDownloadService';
+
 const TrackPlayerContext = createContext();
 
 export const TrackPlayerProvider = ({ children }) => {
@@ -70,6 +72,10 @@ export function useTrackPlayer() {
       await playbackObject.unloadAsync();
     }
 
+    const episodeDownloadService = new EpisodeDownloadService(podcastEpisode)
+
+    const episodeLocalFilePath = await episodeDownloadService.getDownloadedEpisodeFilePath(podcastEpisode)
+
     const track = {
       id: podcastEpisode.id,
       url: podcastEpisode.audioFile.url,
@@ -89,7 +95,7 @@ export function useTrackPlayer() {
     });
 
     const { sound } = await Audio.Sound.createAsync(
-      { uri: podcastEpisode.audioFile.url },
+      { uri: episodeLocalFilePath ? episodeLocalFilePath : podcastEpisode.audioFile.url },
       { shouldPlay: true }
     );
 
