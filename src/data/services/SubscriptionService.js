@@ -10,7 +10,7 @@ export class SubscriptionService {
   }
 
   async subscribeAndBulkSaveEpisodes(podcastChannel, podcastEpisodes) {
-    LoggingService.log('Started saving channel and episodes');
+    LoggingService.log(' -> Started saving channel and episodes');
 
     let subscribedChannel
 
@@ -18,13 +18,13 @@ export class SubscriptionService {
       subscribedChannel = await this._podcastChannelRepository.subscribeToChannel(podcastChannel)
     } catch (error) { }
 
-    LoggingService.log('Finished saving channel: ', subscribedChannel.title);
+    LoggingService.log(' -> Finished saving channel: ', subscribedChannel.title);
 
-    LoggingService.log('Starting saving episodes');
+    LoggingService.log('   -> Starting saving episodes');
 
     this._podcastChannelRepository.saveEpisodesFromSubscribedChannel(subscribedChannel, podcastEpisodes)
       .then(() => {
-        LoggingService.log('Finished saving episodes');
+        LoggingService.log('   -> Finished saving episodes');
       })
 
     return subscribedChannel

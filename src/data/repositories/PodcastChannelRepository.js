@@ -1,6 +1,5 @@
 import { DatabaseCollectionNames } from '../../domain/enums/DatabaseCollectionNames';
 
-import { database } from '../_fakeDB';
 import { Database } from '../protocols/Database'
 import { LoggingService } from '../services/LoggingService';
 
@@ -13,23 +12,22 @@ export class PodcastChannelRepository {
     if (!db instanceof Database)
       throw LoggingService.error('You need to use a class that extends `/data/protocols/Database`');
 
-    /** @type {Database} _newDB */
-    this._newDB = db;
-    this._db = database;
+    /** @type {Database} _db */
+    this._db = db;
   }
 
   async getSubscribedChannels() {
-    return this._newDB.getAllItems(DatabaseCollectionNames.SUBSCRIBED_PODCASTS, 'title')
+    return this._db.getAllItems(DatabaseCollectionNames.SUBSCRIBED_PODCASTS, 'title')
   }
 
   async getSavedEpisodesBySubscribedChannel(channelId) {
-    return this._newDB.searchByField(DatabaseCollectionNames.SUBSCRIBED_PODCAST_EPISODES, 'channelId', channelId)
+    return this._db.searchByField(DatabaseCollectionNames.SUBSCRIBED_PODCAST_EPISODES, 'channelId', channelId)
   }
 
   async getLatestsEpisodesFromSubscribedChannels() {
     const latestsEpisodes = []
 
-    const channels = await this._newDB.getAllItems(DatabaseCollectionNames.SUBSCRIBED_PODCASTS)
+    const channels = await this._db.getAllItems(DatabaseCollectionNames.SUBSCRIBED_PODCASTS)
 
     const daysPastToLookForEpisodes = 7 // one week
 
@@ -39,7 +37,7 @@ export class PodcastChannelRepository {
     const oldReferenceDate = new Date(today.getTime() - daysPastToLookForEpisodes * daysToMilisseconds);
 
     for await (const channel of channels) {
-      const episodes = await this._newDB.searchByField(DatabaseCollectionNames.SUBSCRIBED_PODCAST_EPISODES, 'channelId', channel.id)
+      const episodes = await this._db.searchByField(DatabaseCollectionNames.SUBSCRIBED_PODCAST_EPISODES, 'channelId', channel.id)
 
       for await (const episode of episodes) {
         const episodePublishDate = new Date(episode.publishDate)
@@ -55,20 +53,14 @@ export class PodcastChannelRepository {
   }
 
   async getChannelById(channelId) {
-    return await this._newDB.getItemDetails(DatabaseCollectionNames.SUBSCRIBED_PODCASTS, channelId)
-  }
-
-  getEpisodeById(episodeId) {
-    return this._db.downloadedPodcastEpisodes.find(
-      (episode) => episode.id === episodeId
-    );
+    return await this._db.getItemDetails(DatabaseCollectionNames.SUBSCRIBED_PODCASTS, channelId)
   }
 
   /**
    * @param {PodcastChannel} channel
    */
   async subscribeToChannel(channel) {
-    const channelWithTitle = await this._newDB.searchByField(DatabaseCollectionNames.SUBSCRIBED_PODCASTS, "title", channel.title)
+    const channelWithTitle = await this._db.searchByField(DatabaseCollectionNames.SUBSCRIBED_PODCASTS, "title", channel.title)
 
     if (channelWithTitle.length > 0) {
       LoggingService.error("Channel is already subscribed")
@@ -79,7 +71,7 @@ export class PodcastChannelRepository {
       ...channel.toObject(),
     }
 
-    return await this._newDB.insertItem(DatabaseCollectionNames.SUBSCRIBED_PODCASTS, channelToSubscribe)
+    return await this._db.insertItem(DatabaseCollectionNames.SUBSCRIBED_PODCASTS, channelToSubscribe)
   }
 
   /**
@@ -88,29 +80,29 @@ export class PodcastChannelRepository {
  */
   async saveEpisodesFromSubscribedChannel(channel, episodes) {
     for await (const episode of episodes) {
-      LoggingService.log('salvando o episódio: ', episode.title);
+      LoggingService.log('   -> Salvando o episódio: ', episode.title);
 
-      const episodeWithTitle = await this._newDB.searchByField(
+      const episodeWithTitle = await this._db.searchByField(
         DatabaseCollectionNames.SUBSCRIBED_PODCAST_EPISODES,
         "title",
         episode.title
       )
 
       if (episodeWithTitle.length > 0) {
-        LoggingService.error("Episode is already saved")
+        LoggingService.warn("     -> Episode is already saved")
         continue
       }
 
-      LoggingService.log('episódio ainda não está no banco');
+      LoggingService.log('     -> Episódio ainda não está no banco');
 
       const episodeToSave = {
         ...episode.toObject(),
         channelId: channel.id,
       }
 
-      await this._newDB.insertItem(DatabaseCollectionNames.SUBSCRIBED_PODCAST_EPISODES, episodeToSave)
+      await this._db.insertItem(DatabaseCollectionNames.SUBSCRIBED_PODCAST_EPISODES, episodeToSave)
 
-      LoggingService.log('episódio salvo com sucesso');
+      LoggingService.log('     -> Episódio salvo com sucesso');
 
       continue
     }
@@ -121,10 +113,10 @@ export class PodcastChannelRepository {
 
     if (episodesFromChannel !== null)
       for await (const episode of episodesFromChannel) {
-        await this._newDB.removeItem(DatabaseCollectionNames.SUBSCRIBED_PODCAST_EPISODES, episode.id)
+        await this._db.removeItem(DatabaseCollectionNames.SUBSCRIBED_PODCAST_EPISODES, episode.id)
       }
 
-    return await this._newDB.removeItem(DatabaseCollectionNames.SUBSCRIBED_PODCASTS, channelId)
+    return await this._db.removeItem(DatabaseCollectionNames.SUBSCRIBED_PODCASTS, channelId)
   }
 }
 
