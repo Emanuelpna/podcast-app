@@ -7,7 +7,6 @@ import { PodcastAudioFile } from '../../domain/models/podcast/PodcastAudioFile';
 
 import { usePrettyStringToSeconds } from '../../data/hooks/commons/usePrettyStringToSeconds';
 
-// RSSReader('https://jogabilida.de/category/podcasts/podcast-games/feed/podcast/');
 export class RSSReader {
   async fetchRSSFeed(feedUrl) {
     const response = await fetch(feedUrl);

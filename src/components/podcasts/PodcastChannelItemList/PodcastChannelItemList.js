@@ -6,23 +6,23 @@ import { IconButton } from "../../commons/IconButton/IconButton";
 import * as S from './styles'
 import { colors } from "../../../styles/colors";
 
-export function PodcastChannelItemList({ channel, episodes, onChannelSubscribe }) {
+export function PodcastChannelItemList({ title, logo, totalEpisodesQuantity, onChannelSubscribe }) {
   return (
     <S.Container>
       <View>
-        <S.CoverImage source={{ uri: channel.logo }} />
+        <S.CoverImage source={{ uri: logo }} />
       </View>
 
       <S.ContentWrapper>
-        <S.EpisodeTitle>{channel.title}</S.EpisodeTitle>
+        <S.EpisodeTitle>{title}</S.EpisodeTitle>
 
-        <S.EpisodeSubtitle>{channel.totalEpisodesQuantity} Episódios</S.EpisodeSubtitle>
+        <S.EpisodeSubtitle>{totalEpisodesQuantity} Episódios</S.EpisodeSubtitle>
       </S.ContentWrapper>
 
       <S.ButtonWrapper>
         <IconButton
           size={48}
-          onButtonPress={() => onChannelSubscribe(channel, episodes)}
+          onButtonPress={onChannelSubscribe}
           icon={
             <FontAwesome6
               name="plus"

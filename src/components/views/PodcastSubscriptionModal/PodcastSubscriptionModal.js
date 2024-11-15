@@ -35,7 +35,8 @@ export function PodcastSubscriptionModal({ navigation }) {
     isSearching,
     podcastSearchResults,
     fetchFeedRSS,
-    subscribeToChannel
+    subscribeToChannel,
+    doChannelSearch
   } = usePodcastSearch(() => {
     fetchSubscribedChannels()
 
@@ -51,19 +52,17 @@ export function PodcastSubscriptionModal({ navigation }) {
       return fetchFeedRSS(podcastSearch)
     }
 
-    // do channel search on itunes API in the future
-    // doChannelSearch(podcastSearch)
+    doChannelSearch(podcastSearch)
   }
 
-  async function onChannelSubscribe(podcastChannel, podcastEpisodes) {
-    await subscribeToChannel(podcastChannel, podcastEpisodes)
+  async function onChannelSubscribe(podcastData) {
+    await subscribeToChannel(podcastData)
 
     return setPodcastSearch('')
   }
 
   return (
     <>
-
       <View style={{
         width: '100%',
         flexDirection: 'row',
@@ -91,24 +90,24 @@ export function PodcastSubscriptionModal({ navigation }) {
         />
       </View>
 
-
       <Divider style={{ marginVertical: 12 }} />
 
       {isSearching ?
         <Loading /> : (
           <FlatList
-            data={podcastSearchResults.sort((a, b) =>
-              a.title.localeCompare(b.title)
-            )}
-
-            keyExtractor={(item) => item.podcastChannel.website}
-            renderItem={({ item }) => (
-              <PodcastChannelItemList
-                channel={item.podcastChannel}
-                episodes={item.podcastEpisodes}
-                onChannelSubscribe={onChannelSubscribe}
-              />
-            )}
+            data={podcastSearchResults}
+            ItemSeparatorComponent={() => <View style={{ height: 20 }} />}
+            keyExtractor={(item) => item?.id ? item.id : item.podcastChannel.website}
+            renderItem={({ item: podcastData }) => {
+              return (
+                <PodcastChannelItemList
+                  logo={podcastData?.logo ? podcastData.logo : podcastData.podcastChannel.logo}
+                  title={podcastData?.title ? podcastData.title : podcastData.podcastChannel.title}
+                  totalEpisodesQuantity={podcastData?.totalEpisodesQuantity ? podcastData.totalEpisodesQuantity : podcastData.podcastChannel.totalEpisodesQuantity}
+                  onChannelSubscribe={() => onChannelSubscribe(podcastData)}
+                />
+              )
+            }}
           />
         )
       }
