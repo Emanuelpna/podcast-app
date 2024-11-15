@@ -68,7 +68,7 @@ export function MiniPlayer({
           justifyContent: 'center',
         }}>
         <IconButton
-          size={14}
+          size={32}
           onButtonPress={onTogglePlayPause}
           icon={
             <FontAwesome6

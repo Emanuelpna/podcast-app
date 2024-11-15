@@ -17,6 +17,9 @@ export function PlayerControls({
   isLoading,
   onTogglePlayPause,
   onTrackProgressChange,
+  onBackwardsBySeconds,
+  onForwardsBySeconds,
+  onCyclePlaybackRate
 }) {
   const formatDurationTime = useTimeToToPrettySecondsString(duration);
   const formatElapsedTime = useTimeToToPrettySecondsString(elapsedTime / 1000);
@@ -56,9 +59,9 @@ export function PlayerControls({
           isHollowed
           mode="default"
           icon={
-            <S.Icon name="rotate-left" size={22} color={colors.text.main} />
+            <S.IconMaterial name="rewind-15" size={22} color={colors.text.main} />
           }
-          onButtonPress={() => console.log('Pressed')}
+          onButtonPress={onBackwardsBySeconds}
         />
 
         <IconButton
@@ -66,7 +69,7 @@ export function PlayerControls({
           mode="contained"
           isDisabled={isLoading}
           onButtonPress={onTogglePlayPause}
-          icon={({ color }) =>
+          icon={
             isLoading ? (
               <ActivityIndicator animating={true} color={colors.text.main} />
             ) : (
@@ -84,9 +87,9 @@ export function PlayerControls({
           isHollowed
           mode="default"
           icon={
-            <S.Icon name="rotate-right" size={22} color={colors.text.main} />
+            <S.IconMaterial name="fast-forward-30" size={22} color={colors.text.main} />
           }
-          onButtonPress={() => console.log('Pressed')}
+          onButtonPress={onForwardsBySeconds}
         />
 
         <IconButton
@@ -98,6 +101,8 @@ export function PlayerControls({
           onButtonPress={() => console.log('Pressed')}
         />
       </S.ControlsButtonsRow>
+
+      <View style={{ height: 16 }} />
 
       <S.ControlsButtonsRow>
         <IconButton
@@ -112,7 +117,7 @@ export function PlayerControls({
         <IconButton
           isHollowed
           mode="default"
-          icon={({ color }) => <S.Icon name="list" size={22} color={colors.text.main} />}
+          icon={<S.Icon name="list" size={22} color={colors.text.main} />}
           onButtonPress={() => console.log('Pressed')}
         />
 
@@ -122,7 +127,7 @@ export function PlayerControls({
           icon={
             <S.Icon name="gauge-high" size={22} color={colors.text.main} />
           }
-          onButtonPress={() => console.log('Pressed')}
+          onButtonPress={onCyclePlaybackRate}
         />
 
         <IconButton

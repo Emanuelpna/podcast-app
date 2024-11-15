@@ -26,10 +26,10 @@ npx expo start --tunnel
 
 ## Next Steps
 
+- [x] Fix Player styles and playbackObject persistance to use on AsyncStorage
+- [ ] Add iTunes or Spotify API integration on usePodcastSearch()
 - [ ] Add feedback to download episode progress on downloads page
 - [ ] Add a toast notifications system
-- [ ] Fix Player styles and playbackObject persistance to use on AsyncStorage
-- [ ] Add iTunes or Spotify API integration on usePodcastSearch()
 
 ## TO DO
 

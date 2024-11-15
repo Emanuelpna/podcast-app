@@ -2,6 +2,7 @@ import styled, { css } from 'styled-components/native';
 import Slider from '@react-native-community/slider';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { Button, IconButton as PaperIconButton } from 'react-native-paper';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 
 import { fonts } from '../../../styles/fonts';
 import { colors } from '../../../styles/colors';
@@ -40,10 +41,12 @@ export const ControlsButtonsRow = styled.View`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
+  gap: 12px;
+  padding: 0 12px;
   margin-top: 16px;
 `;
 
-export const IconButton = styled(PaperIconButton)` 
+export const IconButton = styled(PaperIconButton)`
   width: 56px;
   height: 56px;
   background-color: ${colors.accent.main};
@@ -62,5 +65,9 @@ export const IconButton = styled(PaperIconButton)`
 `;
 
 export const Icon = styled(FontAwesome6)`
+  color: ${colors.text[200]};
+`;
+
+export const IconMaterial = styled(MaterialCommunityIcons)`
   color: ${colors.text[200]};
 `;

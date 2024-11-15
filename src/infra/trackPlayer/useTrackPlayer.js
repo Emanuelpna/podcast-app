@@ -1,14 +1,15 @@
 import { createContext, useState, useContext } from 'react';
 import { Audio } from 'expo-av';
 
+import { LoggingService } from '../../data/services/LoggingService';
 import { EpisodeDownloadService } from '../../data/services/EpisodeDownloadService';
 
 const TrackPlayerContext = createContext();
 
 export const TrackPlayerProvider = ({ children }) => {
   /** @type {[Audio.Sound?, React.Dispatch<Audio.Sound>]} state */
-  const [playbackObject, setPlaybackObject] = useState(undefined);
-  const [currentTrack, setCurrentTrack] = useState();
+  const [playbackObject, setPlaybackObject] = useState(null);
+  const [currentTrack, setCurrentTrack] = useState(null);
 
   const [duration, setDuration] = useState(0);
   const [position, setPosition] = useState(0);
@@ -66,9 +67,9 @@ export function useTrackPlayer() {
   const trackPlayingProgress = duration > 0 ? position / duration : 0;
 
   async function loadTrackIntoPlayer(podcastChannel, podcastEpisode) {
-    if (currentTrack && currentTrack.id === podcastEpisode.id) return;
+    if (currentTrack?.id === podcastEpisode.id) return;
 
-    if (currentTrack) {
+    if (currentTrack !== null || playbackObject !== null) {
       await playbackObject.unloadAsync();
     }
 
@@ -92,12 +93,15 @@ export function useTrackPlayer() {
 
     await Audio.setAudioModeAsync({
       staysActiveInBackground: true,
+      shouldDuckAndroid: false
     });
 
     const { sound } = await Audio.Sound.createAsync(
       { uri: episodeLocalFilePath ? episodeLocalFilePath : podcastEpisode.audioFile.url },
       { shouldPlay: true }
     );
+
+    currentPlaybackRateIndex = 1
 
     sound.setOnPlaybackStatusUpdate((status) => {
       setDuration(status.durationMillis);
@@ -120,7 +124,7 @@ export function useTrackPlayer() {
   function play() {
     if (!playbackObject) return;
 
-    console.log('Play :>> ');
+    LoggingService.log('Play');
 
     return playbackObject.playAsync();
   }
@@ -128,8 +132,7 @@ export function useTrackPlayer() {
   function pause() {
     if (!playbackObject) return;
 
-    console.log('Pause :>> ');
-
+    LoggingService.log('Pause');
 
     return playbackObject.pauseAsync();
   }
@@ -137,26 +140,56 @@ export function useTrackPlayer() {
   async function goToTrackPosition(progress) {
     if (!playbackObject) return;
 
-    console.log('GoToTrackPosition :>> ');
+    const newPosition = progress * duration
+
+    LoggingService.log('Go To TrackPosition: ', newPosition);
 
     setIsLoading(true);
 
-    playbackObject
-      .playFromPositionAsync(progress * duration)
-      .then(() => setIsLoading(false));
+    await playbackObject.playFromPositionAsync(newPosition)
+
+    setIsLoading(false)
   }
 
-  // function fowardsBySeconds(seconds) {
-  //   if (!playbackObject) return;
+  async function fowardsBySeconds(seconds) {
+    if (!playbackObject) return;
 
-  //   return TrackPlayer.seekBy(seconds);
-  // }
+    const newPosition = position + (seconds * 1000)
 
-  // function backwardsBySeconds(seconds) {
-  //   if (!playbackObject) return;
+    LoggingService.log('Forward To TrackPosition: ', newPosition);
 
-  //   return TrackPlayer.seekBy(-seconds);
-  // }
+    setIsLoading(true);
+
+    await playbackObject.playFromPositionAsync(newPosition)
+
+    setIsLoading(false)
+  }
+
+  async function backwardsBySeconds(seconds) {
+    if (!playbackObject) return;
+
+    const newPosition = position - (seconds * 1000)
+
+    LoggingService.log('Backwards To TrackPosition: ', newPosition);
+
+    setIsLoading(true);
+
+    await playbackObject.playFromPositionAsync(newPosition)
+
+    setIsLoading(false)
+  }
+
+  async function setAudioRate(rate) {
+    if (!playbackObject) return;
+
+    setIsLoading(true);
+
+    LoggingService.log('Set Track Playback Rate To: ', rate);
+
+    await playbackObject.setRateAsync(rate)
+
+    setIsLoading(false)
+  }
 
   return {
     isLoading,
@@ -169,9 +202,10 @@ export function useTrackPlayer() {
     loadTrackIntoPlayer,
     play,
     pause,
-    changeTrackPlayerVolume,
+    setAudioRate,
+    fowardsBySeconds,
     goToTrackPosition,
-    // fowardsBySeconds,
-    // backwardsBySeconds,
+    backwardsBySeconds,
+    changeTrackPlayerVolume,
   };
 }

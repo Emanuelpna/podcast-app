@@ -18,6 +18,9 @@ export function Player({
   onCoverPress,
   onTogglePlayPause,
   onTrackProgressChange,
+  onBackwardsBySeconds,
+  onForwardsBySeconds,
+  onCyclePlaybackRate
 }) {
   return (
     <S.Container>
@@ -34,7 +37,10 @@ export function Player({
         isPlaying={isPlaying}
         isLoading={isLoading}
         onTogglePlayPause={onTogglePlayPause}
+        onForwardsBySeconds={onForwardsBySeconds}
+        onBackwardsBySeconds={onBackwardsBySeconds}
         onTrackProgressChange={onTrackProgressChange}
+        onCyclePlaybackRate={onCyclePlaybackRate}
       />
     </S.Container>
   );

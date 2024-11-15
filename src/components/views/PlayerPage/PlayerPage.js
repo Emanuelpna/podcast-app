@@ -1,7 +1,3 @@
-import { Text, StyleSheet } from 'react-native';
-import Slider from '@react-native-community/slider';
-import { ActivityIndicator } from 'react-native-paper';
-
 import { Navigations } from '../../../data/Navigations';
 
 import { useTrackPlayer } from '../../../infra/trackPlayer/useTrackPlayer';
@@ -9,6 +5,8 @@ import { useTrackPlayer } from '../../../infra/trackPlayer/useTrackPlayer';
 import { Player } from '../../player/Player/Player';
 
 import { Layout } from '../../commons/Layout/Layout';
+
+const PLAYBACK_RATES = [0.5, 1.0, 2.0, 3.0]
 
 export function PlayerPage({ navigation }) {
   const {
@@ -18,10 +16,14 @@ export function PlayerPage({ navigation }) {
     play,
     pause,
     trackElapsedTime,
-    trackRemainingTime,
     trackPlayingProgress,
     goToTrackPosition,
+    fowardsBySeconds,
+    backwardsBySeconds,
+    setAudioRate
   } = useTrackPlayer();
+
+  let currentPlaybackRateIndex = 1
 
   function openEpisodePage() {
     Navigations.navigateToPodcastEpisodePage(
@@ -31,7 +33,7 @@ export function PlayerPage({ navigation }) {
     );
   }
 
-  async function onChange(newProgressValue) {
+  async function onTrackProgressChange(newProgressValue) {
     goToTrackPosition(newProgressValue);
   }
 
@@ -40,22 +42,31 @@ export function PlayerPage({ navigation }) {
     else play();
   }
 
+  function cyclePlaybackRate() {
+    currentPlaybackRateIndex++
+
+    const rate = PLAYBACK_RATES[currentPlaybackRateIndex % PLAYBACK_RATES.length]
+
+    setAudioRate(rate)
+  }
+
   return (
     <Layout>
-      {isLoading && <ActivityIndicator animating={true} color="red" />}
-
       <Player
         title={currentTrack?.title}
         artist={currentTrack?.artist}
         cover={currentTrack?.artwork}
         currentTrackProgress={trackPlayingProgress}
-        duration={currentTrack.duration}
+        duration={currentTrack?.duration}
         elapsedTime={trackElapsedTime}
         isPlaying={isPlaying}
         isLoading={isLoading}
-        onTogglePlayPause={togglePlayPause}
-        onTrackProgressChange={onChange}
         onCoverPress={openEpisodePage}
+        onTrackProgressChange={onTrackProgressChange}
+        onTogglePlayPause={togglePlayPause}
+        onForwardsBySeconds={() => fowardsBySeconds(30)}
+        onBackwardsBySeconds={() => backwardsBySeconds(15)}
+        onCyclePlaybackRate={cyclePlaybackRate}
       />
     </Layout>
   );
