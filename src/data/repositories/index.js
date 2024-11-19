@@ -1,4 +1,4 @@
-import { SyncedDatabase } from "../database/SyncedDatabase"
+import { SyncedDatabase } from "../useCases/SyncedDatabase"
 
 import { SyncDBRepository } from "./SyncDBRepository"
 import { PodcastChannelRepository } from "./PodcastChannelRepository"
