@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 
-import { podcastChannelRepository } from "../../repositories"
+import { podcastChannelRepository, podcastEpisodeRepository } from "../../repositories"
 
 export function useLatestsEpisodes() {
   const [isSearching, setIsSearching] = useState(false)
@@ -9,7 +9,9 @@ export function useLatestsEpisodes() {
   async function getLatestsEpisodes() {
     setIsSearching(true)
 
-    const episodes = await podcastChannelRepository.getLatestsEpisodesFromSubscribedChannels()
+    const channels = await podcastChannelRepository.getSubscribedChannels()
+
+    const episodes = await podcastEpisodeRepository.getLatestsEpisodesFromSubscribedChannels(channels)
 
     setLatestsEpisodes(episodes)
 
