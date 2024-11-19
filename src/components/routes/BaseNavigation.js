@@ -3,6 +3,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { TabsNavigation } from './TabsNavigation';
 import { PodcastNavigation } from './PodcastNavigation';
 
+import { DebugPage } from '../views/DebugPage/DebugPage';
 import { PlayerPage } from '../views/PlayerPage/PlayerPage';
 import { PodcastSubscriptionModal } from '../views/PodcastSubscriptionModal/PodcastSubscriptionModal';
 
@@ -14,6 +15,15 @@ const Stack = createStackNavigator();
 export function BaseNavigation() {
   return (
     <Stack.Navigator initialRouteName="TabsNavigation">
+      <Stack.Screen
+        name="DebugPage"
+        component={DebugPage}
+        options={{
+          title: 'AsyncStorage',
+          ...headerOptionsStyle
+        }}
+      />
+
       <Stack.Screen
         name="PlayerPage"
         component={PlayerPage}

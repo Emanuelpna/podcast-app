@@ -27,37 +27,71 @@ export function ProfilePage({ navigation }) {
       </S.UserContainer>
 
       <View style={{ flex: 1, justifyContent: 'space-between' }}>
-        <Card onPress={() => navigation.navigate('PlaylistsPage')}>
-          <S.PlaylistCardContainer>
-            <View
-              style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+        <View style={{ gap: 12 }}>
+          <Card onPress={() => navigation.navigate('PlaylistsPage')}>
+            <S.PlaylistCardContainer>
+              <View
+                style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+                <Icon
+                  size={24}
+                  source={() => (
+                    <FontAwesome6
+                      name="list-ul"
+                      size={22}
+                      color={colors.primary.main}
+                    />
+                  )}
+                />
+
+                <S.PlaylistCardTitle>Minhas Playlists</S.PlaylistCardTitle>
+              </View>
+
               <Icon
-                size={24}
+                size={20}
                 source={() => (
                   <FontAwesome6
-                    name="list-ul"
-                    size={22}
+                    size={18}
+                    name="arrow-right"
+                    style={{ marginTop: 4 }}
                     color={colors.primary.main}
                   />
                 )}
               />
+            </S.PlaylistCardContainer>
+          </Card>
 
-              <S.PlaylistCardTitle>Minhas Playlists</S.PlaylistCardTitle>
-            </View>
-
-            <Icon
-              size={20}
-              source={() => (
-                <FontAwesome6
-                  size={18}
-                  name="arrow-right"
-                  style={{ marginTop: 4 }}
-                  color={colors.primary.main}
+          <Card onPress={() => navigation.navigate('DebugPage')}>
+            <S.PlaylistCardContainer>
+              <View
+                style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+                <Icon
+                  size={24}
+                  source={() => (
+                    <FontAwesome6
+                      name="database"
+                      size={22}
+                      color={colors.primary.main}
+                    />
+                  )}
                 />
-              )}
-            />
-          </S.PlaylistCardContainer>
-        </Card>
+
+                <S.PlaylistCardTitle>Open Debug</S.PlaylistCardTitle>
+              </View>
+
+              <Icon
+                size={20}
+                source={() => (
+                  <FontAwesome6
+                    size={18}
+                    name="arrow-right"
+                    style={{ marginTop: 4 }}
+                    color={colors.primary.main}
+                  />
+                )}
+              />
+            </S.PlaylistCardContainer>
+          </Card>
+        </View>
 
         <View style={{ marginBottom: 16 }}>
           <Button

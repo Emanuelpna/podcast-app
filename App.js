@@ -22,14 +22,14 @@ import { LoginNavigation } from './src/components/routes/LoginNavigation';
 import { colors } from './src/styles/colors';
 
 export default function App() {
-  useSintonyFonts({
-    Sintony_700Bold,
-    Sintony_400Regular,
-  });
-
   usePoppinsFonts({
     Poppins_400Regular,
     Poppins_700Bold,
+  });
+
+  useSintonyFonts({
+    Sintony_700Bold,
+    Sintony_400Regular,
   });
 
   return (
@@ -39,6 +39,7 @@ export default function App() {
           <TrackPlayerProvider>
             <NavigationContainer
               theme={{
+                dark: true,
                 colors: {
                   background: colors.background[900]
                 }
