@@ -1,4 +1,5 @@
 import * as FileSystem from 'expo-file-system';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { LoggingService } from './LoggingService'
 
@@ -20,7 +21,7 @@ export class EpisodeDownloadService {
     try {
       await FileSystem.makeDirectoryAsync(this.#episodesDirectory);
     } catch (error) {
-      LoggingService.error('Directory exists', error);
+      LoggingService.warn('Directory exists', error);
     }
   }
 
@@ -34,7 +35,7 @@ export class EpisodeDownloadService {
    * @param {PodcastEpisode} episode
    */
   async getDownloadedEpisodeFilePath(episode) {
-    const fileNameWithExtension = this.#generateFileNameWithExtension(episode)
+    const fileNameWithExtension = await this.#generateFileNameWithExtension(episode)
 
     const directoryContent = await this.getDownloadedEpisodesList()
 
@@ -50,7 +51,7 @@ export class EpisodeDownloadService {
    * @param {FileSystem.DeletingOptions} options
    */
   async deleteDownloadedEpisode(episode, options = {}) {
-    const fileNameWithExtension = this.#generateFileNameWithExtension(episode)
+    const fileNameWithExtension = await this.#generateFileNameWithExtension(episode)
 
     try {
       await FileSystem.deleteAsync(this.#episodesDirectory + fileNameWithExtension, options)
@@ -65,7 +66,7 @@ export class EpisodeDownloadService {
    * @param {FileSystem.DownloadOptions} options
    */
   async startDownload(episode, options = {}) {
-    const fileNameWithExtension = this.#generateFileNameWithExtension(episode)
+    const fileNameWithExtension = await this.#generateFileNameWithExtension(episode)
 
     await this.tryCreateContentDirectory();
 
@@ -77,9 +78,9 @@ export class EpisodeDownloadService {
     );
 
     try {
-      await this.downloadResumable.downloadAsync();
+      const downloadResult = await this.downloadResumable.downloadAsync();
 
-      LoggingService.log('Finished downloading episode');
+      LoggingService.log('Finished downloading episode', downloadResult);
     } catch (error) {
       LoggingService.error(error);
     }
@@ -107,6 +108,8 @@ export class EpisodeDownloadService {
     try {
       await this.downloadResumable.resumeAsync();
 
+      AsyncStorage.removeItem(DOWNLOAD_COLLECTION, JSON.stringify(savableDownload));
+
       LoggingService.log('Finished downloading episode');
     } catch (e) {
       LoggingService.error(e);
@@ -116,10 +119,12 @@ export class EpisodeDownloadService {
   /**
    * @param {PodcastEpisode} episode
    */
-  #generateFileNameWithExtension(episode) {
+  async #generateFileNameWithExtension(episode) {
     if (episode.audioFile.fileType !== 'audio/mpeg') return null
 
-    return `podcast-app-${episode.id}.mp3`
+    const encodedEpisodeId = encodeURIComponent(episode.id);
+
+    return `podcast-app-${encodedEpisodeId}.mp3`
   }
 
   async #getSavedResumableDownload() {

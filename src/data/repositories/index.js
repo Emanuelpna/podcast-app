@@ -17,7 +17,7 @@ export const podcastChannelRepository = new PodcastChannelRepository(
 )
 
 export const podcastEpisodeRepository = new PodcastEpisodeRepository(
-  syncedDatabase
+  localDB
 )
 
 export const syncDBRepository = new SyncDBRepository(cloudDB, localDB)

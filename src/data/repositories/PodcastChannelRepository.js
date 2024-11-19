@@ -74,48 +74,7 @@ export class PodcastChannelRepository {
     return await this._db.insertItem(DatabaseCollectionNames.SUBSCRIBED_PODCASTS, channelToSubscribe)
   }
 
-  /**
- * @param {PodcastChannel} channel
- * @param {PodcastEpisode[]} episodes
- */
-  async saveEpisodesFromSubscribedChannel(channel, episodes) {
-    for await (const episode of episodes) {
-      LoggingService.log('   -> Salvando o episódio: ', episode.title);
-
-      const episodeWithTitle = await this._db.searchByField(
-        DatabaseCollectionNames.SUBSCRIBED_PODCAST_EPISODES,
-        "title",
-        episode.title
-      )
-
-      if (episodeWithTitle.length > 0) {
-        LoggingService.warn("     -> Episode is already saved")
-        continue
-      }
-
-      LoggingService.log('     -> Episódio ainda não está no banco');
-
-      const episodeToSave = {
-        ...episode.toObject(),
-        channelId: channel.id,
-      }
-
-      await this._db.insertItem(DatabaseCollectionNames.SUBSCRIBED_PODCAST_EPISODES, episodeToSave)
-
-      LoggingService.log('     -> Episódio salvo com sucesso');
-
-      continue
-    }
-  }
-
   async unsubscribeFromChannel(channelId) {
-    const episodesFromChannel = await this.getSavedEpisodesBySubscribedChannel(channelId)
-
-    if (episodesFromChannel !== null)
-      for await (const episode of episodesFromChannel) {
-        await this._db.removeItem(DatabaseCollectionNames.SUBSCRIBED_PODCAST_EPISODES, episode.id)
-      }
-
     return await this._db.removeItem(DatabaseCollectionNames.SUBSCRIBED_PODCASTS, channelId)
   }
 }

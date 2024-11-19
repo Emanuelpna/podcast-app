@@ -2,7 +2,8 @@ import { useEffect, useRef } from 'react';
 import { View, FlatList } from 'react-native';
 
 import { Navigations } from '../../../data/Navigations';
-import { podcastChannelRepository } from '../../../data/repositories';
+import { EpisodeDownloadService } from '../../../data/services/EpisodeDownloadService';
+import { podcastChannelRepository, podcastEpisodeRepository } from '../../../data/repositories';
 import { useSubscribedPodcastsFetch } from '../../../data/hooks/podcast/useSubscribedPodcastsFetch';
 
 import { useTrackPlayer } from '../../../infra/trackPlayer/useTrackPlayer';
@@ -44,9 +45,17 @@ export function PodcastFeedPage({ route, navigation }) {
   }
 
   async function onUnsubscribeFromChannel(channelId) {
+    await podcastEpisodeRepository.deleteEpisodesFromChannel(channelId)
+
     await podcastChannelRepository.unsubscribeFromChannel(channelId)
 
     Navigations.navigateToSubscribePage(navigation)
+  }
+
+  async function downloadEpisode(episode) {
+    const episodeDownloadService = new EpisodeDownloadService()
+
+    await episodeDownloadService.startDownload(episode)
   }
 
   useEffect(() => {
@@ -79,13 +88,14 @@ export function PodcastFeedPage({ route, navigation }) {
         ref={podcastEpisodesListRef}
         data={episodesFromChannel}
         contentContainerStyle={{ gap: 16 }}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(podcastEpisode) => podcastEpisode.id}
         renderItem={({ item: podcastEpisode }) => (
           <PodcastEpisodeCard
             channel={podcastChannel}
             episode={podcastEpisode}
             onEpisodePlay={() => playPodcastEpisode(podcastEpisode)}
             onOpenEpisodePage={() => openEpisodePage(podcastEpisode)}
+            onDownloadEpisode={() => downloadEpisode(podcastEpisode)}
           />
         )}
       />

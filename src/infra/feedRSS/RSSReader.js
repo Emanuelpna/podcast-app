@@ -1,3 +1,4 @@
+import { randomUUID } from 'expo-crypto';
 import { XMLParser } from 'fast-xml-parser';
 
 import { PodcastAuthor } from '../../domain/models/podcast/PodcastAuthor';
@@ -47,7 +48,7 @@ export class RSSReader {
         const episodeDuration = episode['itunes:duration'];
 
         return new PodcastEpisode(
-          episode.guid['#text'],
+          randomUUID(),
           channel.link,
           episode.title,
           episode.link,

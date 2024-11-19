@@ -1,7 +1,7 @@
 
 import { useEffect, createContext, useState, useContext } from 'react';
 
-import { podcastChannelRepository } from '../../repositories';
+import { podcastChannelRepository, podcastEpisodeRepository } from '../../repositories';
 
 const SubscribedPodcastsContext = createContext();
 
@@ -60,12 +60,13 @@ export function useSubscribedPodcastsFetch() {
   function fetchEpisodesFromChannel(channelId) {
     setIsFetchingEpisodes(true)
 
-    podcastChannelRepository.getSavedEpisodesBySubscribedChannel(channelId)
-      .then((data) =>
+    podcastEpisodeRepository
+      .getSavedEpisodesBySubscribedChannel(channelId)
+      .then((data) => {
         setEpisodesFromChannel(
           data.sort((a, b) => new Date(b.publishDate) - new Date(a.publishDate))
         )
-      )
+      })
       .finally(() => {
         setIsFetchingEpisodes(false)
       })
