@@ -12,10 +12,10 @@ export class LoggingService {
   }
 
   static #sendLogToConsole(logType, ...messages) {
-    const loggers = {
-      log: console.log,
-      warn: console.warn,
-      error: console.error,
+    const loggersTitle = {
+      log: 'LOG :>>',
+      warn: 'WARN :>>',
+      error: 'ERROR :>>',
     }
 
     /**
@@ -30,7 +30,7 @@ export class LoggingService {
      * https://www.jsv9000.app/?code=ZnVuY3Rpb24gbG9nKG1lc3NhZ2UpIHsKICBmdW5jdGlvbiBsb2dJblNldFRpbWVvdXQoKSB7CiAgICBjb25zb2xlLmxvZyhtZXNzYWdlKTsKICB9CiAgCiAgc2V0VGltZW91dChsb2dJblNldFRpbWVvdXQsIDApCn0KCmZvciAobGV0IGluZGV4ID0gMDsgaW5kZXggPCA0OyBpbmRleCsrKSB7CiAgbG9nKGBsb2cgY29tIHNldFRpbWVvdXQ6ICR7aW5kZXggKyAxfWApCiAgCiAgY29uc29sZS5sb2coYGxvZyBjb20gY29uc29sZTogJHtpbmRleCArIDF9YCkKfQ%3D%3D
      */
     setTimeout(() => {
-      loggers[logType]?.(...messages)
+      console.log(loggersTitle[logType] ?? '', ...messages)
     }, 0)
   }
 }

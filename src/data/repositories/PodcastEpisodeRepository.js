@@ -1,4 +1,3 @@
-import { randomUUID } from 'expo-crypto';
 import { DatabaseCollectionNames } from '../../domain/enums/DatabaseCollectionNames';
 
 import { Database } from '../protocols/Database'
