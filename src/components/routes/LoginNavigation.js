@@ -9,11 +9,11 @@ import { LoginPage } from '../views/LoginPage/LoginPage';
 const Stack = createStackNavigator();
 
 export function LoginNavigation() {
-  const { userIsLoggedIn } = useUserIsLoggedIn();
+  const { userIsLoggedIn, loggedInAsGuest } = useUserIsLoggedIn();
 
   return (
     <Stack.Navigator initialRouteName="LoginPage" screenOptions={{ headerShown: false }}>
-      {userIsLoggedIn ? (
+      {userIsLoggedIn || loggedInAsGuest ? (
         <Stack.Screen name="BaseNavigation" component={BaseNavigation} />
       ) : (
         <Stack.Screen

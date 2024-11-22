@@ -6,6 +6,7 @@ const FirebaseAuthContext = createContext();
 
 export const FirebaseAuthProvider = ({ children }) => {
   const [userIsLoggedIn, setUserIsLoggedIn] = useState(null);
+  const [loggedInAsGuest, setLoggedInAsGuest] = useState(false);
 
   useEffect(() => {
     setUserIsLoggedIn(FirebaseRepository.userIsLoggedIn());
@@ -15,8 +16,16 @@ export const FirebaseAuthProvider = ({ children }) => {
     );
   }, []);
 
+  function loginAsGuest() {
+    setLoggedInAsGuest(true)
+  }
+
+  function doGuestLogout() {
+    setLoggedInAsGuest(false)
+  }
+
   return (
-    <FirebaseAuthContext.Provider value={{ userIsLoggedIn, setUserIsLoggedIn }}>
+    <FirebaseAuthContext.Provider value={{ userIsLoggedIn, setUserIsLoggedIn, loggedInAsGuest, loginAsGuest, doGuestLogout }}>
       {children}
     </FirebaseAuthContext.Provider>
   );

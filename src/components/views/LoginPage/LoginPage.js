@@ -1,6 +1,8 @@
-import { useFirebaseAuth } from '../../../infra/firebase/useFirebaseAuth';
+import { View } from 'react-native'
 
-import { Card } from '../../commons/Card/Card';
+import { useFirebaseAuth } from '../../../infra/firebase/useFirebaseAuth';
+import { useUserIsLoggedIn } from '../../../infra/firebase/useUserIsLoggedIn';
+
 import { Input } from '../../commons/Input/Input';
 import { Button } from '../../commons/Button/Button';
 import { Layout } from '../../commons/Layout/Layout';
@@ -19,13 +21,15 @@ export function LoginPage({ navigation }) {
     tryLogin,
   } = useFirebaseAuth(navigation);
 
+  const { loginAsGuest } = useUserIsLoggedIn()
+
   return (
     <Layout>
       {isLoading && <Loading />}
 
       <S.Paragraph>Login</S.Paragraph>
 
-      <Card>
+      <View>
         <Input
           label="E-mail"
           placeholder="user@email.com"
@@ -46,7 +50,12 @@ export function LoginPage({ navigation }) {
         <Button onPress={tryLogin} variant="accent">
           Login
         </Button>
-      </Card>
+
+
+        <Button onPress={loginAsGuest} variant="primary">
+          Entrar como Convidado
+        </Button>
+      </View>
 
       <S.Paragraph>{message}</S.Paragraph>
     </Layout>

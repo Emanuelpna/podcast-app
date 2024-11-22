@@ -11,7 +11,7 @@ export function useFirebaseAuth(navigation) {
   const [message, setMessage] = useState('');
   const [isLoading, setLoading] = useState(false);
 
-  const { setUserIsLoggedIn } = useUserIsLoggedIn();
+  const { setUserIsLoggedIn, loggedInAsGuest, doGuestLogout } = useUserIsLoggedIn();
 
   async function tryLogin() {
     setMessage('');
@@ -58,6 +58,10 @@ export function useFirebaseAuth(navigation) {
   }
 
   async function doLogout() {
+    if (loggedInAsGuest) {
+      return doGuestLogout()
+    }
+
     const isLoggedOut = await FirebaseRepository.logout()
 
     return isLoggedOut
