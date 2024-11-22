@@ -1,4 +1,8 @@
 export class Navigations {
+  static navigateToSignupPage(navigation) {
+    navigation.navigate('SingupPage');
+  }
+
   static navigateToPodcastSubscriptionModal(navigation) {
     navigation.navigate('BaseNavigation', {
       screen: 'PodcastSubscriptionModal',

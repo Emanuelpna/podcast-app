@@ -9,6 +9,7 @@ import { Layout } from '../../commons/Layout/Layout';
 import { Loading } from '../../commons/Loading/Loading';
 
 import * as S from './styles';
+import { Navigations } from '../../../data/Navigations';
 
 export function LoginPage({ navigation }) {
   const {
@@ -25,39 +26,52 @@ export function LoginPage({ navigation }) {
 
   return (
     <Layout>
-      {isLoading && <Loading />}
+      <S.Container>
+        {isLoading && <Loading />}
 
-      <S.Paragraph>Login</S.Paragraph>
+        <S.LogoWrapper elevation={5}>
+          <S.Logo
+            source={require('../../../../assets/icon.png')}
+            placeholder={{ blurhash: '8D 07 8A 0D 00 1E 07 67 78 88 70 8C 58 F8 87 7F 80 07 07 27 87 87 70 71 28' }}
+            contentFit="cover"
+            transition={250}
+          />
+        </S.LogoWrapper>
 
-      <View>
-        <Input
-          label="E-mail"
-          placeholder="user@email.com"
-          value={email}
-          inputMode="email"
-          autoComplete="email"
-          onChangeText={setEmail}
-        />
+        <View>
+          <Input
+            label="E-mail"
+            placeholder="user@email.com"
+            value={email}
+            inputMode="email"
+            autoComplete="email"
+            onChangeText={setEmail}
+          />
 
-        <Input
-          label="Senha"
-          placeholder="******"
-          secureTextEntry
-          value={password}
-          onChangeText={setPassword}
-        />
+          <Input
+            label="Senha"
+            placeholder="******"
+            secureTextEntry
+            value={password}
+            onChangeText={setPassword}
+          />
 
-        <Button onPress={tryLogin} variant="accent">
-          Login
+          <Button onPress={tryLogin} variant="accent">
+            Login
+          </Button>
+
+
+          <Button onPress={loginAsGuest} variant="primary">
+            Entrar como Convidado
+          </Button>
+        </View>
+
+        <S.Paragraph>{message}</S.Paragraph>
+
+        <Button onPress={() => navigation.navigate('SingupPage')} variant="primary">
+          Criar uma nova conta
         </Button>
-
-
-        <Button onPress={loginAsGuest} variant="primary">
-          Entrar como Convidado
-        </Button>
-      </View>
-
-      <S.Paragraph>{message}</S.Paragraph>
+      </S.Container>
     </Layout>
   );
 }

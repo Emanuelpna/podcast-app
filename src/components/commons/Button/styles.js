@@ -25,6 +25,13 @@ export const Wrapper = styled(TouchableRipple)`
       background-color: ${colors.accent.main};
     `
   }
+
+  ${({ variant }) =>
+    variant === 'hollow' &&
+    css`
+      background-color: none;
+    `
+  }
 `;
 
 export const Container = styled.View`
@@ -40,10 +47,19 @@ export const IconWrapper = styled.View`
 `
 
 export const Text = styled(NativeText)`
+  flex: 1;
   text-align: center;
   color: ${colors.text[900]};
   font-size: ${fonts.fontSize.base};
   line-height: ${fonts.fontSize.xl};
   font-family: ${fonts.fontFamily.body};
   font-weight: ${fonts.fontWeight.normal};
+
+  ${({ variant }) =>
+    variant === 'hollow' &&
+    css`
+      color: ${colors.text.main};
+      font-weight: ${fonts.fontWeight.bold};
+    `
+  }
 `;

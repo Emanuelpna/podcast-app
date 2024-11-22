@@ -1,19 +1,37 @@
+import { Image } from 'expo-image';
 import styled from 'styled-components/native';
-import { TextInput as PaperTextInput } from 'react-native-paper';
+import { Surface, TextInput as PaperTextInput } from 'react-native-paper';
+
+import { fonts } from '../../../styles/fonts';
+import { colors } from '../../../styles/colors';
 
 export const Container = styled.SafeAreaView`
   flex: 1;
-  justify-content: center;
-  background-color: #080809;
-  padding: 8px;
+  justify-content: space-between;
+  padding: 48px 8px;
 `;
+
+export const LogoWrapper = styled(Surface)`
+  align-self: center;
+  width: 150px;
+  height: 150px;
+  border-radius: 48px;
+`;
+
+export const Logo = styled(Image)`
+  align-self: center;
+  width: 150px;
+  height: 150px;
+`;
+
 
 export const Paragraph = styled.Text`
   margin: 24px;
-  font-size: 18px;
   font-weight: bold;
   text-align: center;
-  color: #ecf0f1;
+  color: ${colors.text.main};
+  font-size: ${fonts.fontSize.base};
+  font-weight: ${fonts.fontWeight.bold};
 `;
 
 export const Input = styled(PaperTextInput)`

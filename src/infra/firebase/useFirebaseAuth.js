@@ -13,44 +13,42 @@ export function useFirebaseAuth(navigation) {
 
   const { setUserIsLoggedIn, loggedInAsGuest, doGuestLogout } = useUserIsLoggedIn();
 
-  async function tryLogin() {
-    setMessage('');
-    setLoading(true);
-
+  async function login() {
     try {
       await FirebaseRepository.signIn(email, password);
 
       setMessage('Sucesso');
       setUserIsLoggedIn(true);
+
       navigation.navigate('BaseNavigation');
     } catch (error) {
-      console.log(error, error === 'Erro na autenticação');
       setMessage(error);
+
       setUserIsLoggedIn(false);
 
-      if (error === 'Erro na autenticação') {
-        Alert.alert('Não cadastrado', 'Deseja cadastrar um novo usuário?', [
-          {
-            text: 'Sim',
-            onPress: async () => {
-              try {
-                await FirebaseRepository.createUser(email, password);
+      throw error;
+    }
+  }
 
-                setMessage('Sucesso');
-                setUserIsLoggedIn(true);
-                navigation.navigate('BaseNavigation');
-              } catch (error) {
-                setMessage(error);
-              }
-            },
-          },
-          {
-            text: 'Não',
-            onPress: () => {
-              console.log('Usuário não quer criar conta');
-            },
-          },
-        ]);
+  async function createAccount() {
+    try {
+      await FirebaseRepository.createUser(email, password);
+
+      await login()
+    } catch (error) {
+      setMessage(error);
+    }
+  }
+
+  async function tryLogin() {
+    setMessage('');
+    setLoading(true);
+
+    try {
+      await login()
+    } catch (error) {
+      if (error === 'Erro na autenticação') {
+        Alert.alert('Usuário não encontrado', 'Email ou senha estão incorretos');
       }
     }
 
@@ -75,6 +73,7 @@ export function useFirebaseAuth(navigation) {
     isLoading,
     message,
     tryLogin,
+    createAccount,
     doLogout
   };
 }

@@ -10,7 +10,7 @@ export function Button({ children, onPress, variant, icon }) {
           </S.IconWrapper>
         )}
 
-        <S.Text>{children}</S.Text>
+        <S.Text variant={variant}>{children}</S.Text>
       </S.Container>
     </S.Wrapper>
   );
