@@ -29,8 +29,8 @@ export class PodcastChannel {
       title: this.title,
       website: this.website,
       author: {
-        name: this.author.name ?? '',
-        email: this.author.email ?? ''
+        name: this.author?.name ?? '',
+        email: this.author?.email ?? ''
       },
       description: this.description,
       lastPublishDate: this.lastPublishDate,
