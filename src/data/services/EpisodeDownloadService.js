@@ -124,7 +124,9 @@ export class EpisodeDownloadService {
 
     const encodedEpisodeId = encodeURIComponent(episode.id);
 
-    return `podcast-app-${encodedEpisodeId}.mp3`
+    const fileName = `podcast-app-${encodedEpisodeId}.mp3`
+
+    return fileName
   }
 
   async #getSavedResumableDownload() {

@@ -2,6 +2,8 @@ import { FlatList } from 'react-native';
 import { Divider } from 'react-native-paper';
 
 import { Navigations } from '../../../data/Navigations';
+import { podcastEpisodeRepository } from '../../../data/repositories';
+import { useOnScreenFocus } from '../../../data/hooks/navigation/useOnScreenFocus';
 import { EpisodeDownloadService } from '../../../data/services/EpisodeDownloadService';
 import { useDownloadedEpisodesFetch } from '../../../data/hooks/podcast/useDownloadedEpisodesFetch';
 
@@ -19,6 +21,8 @@ export function DownloadsPage({ navigation }) {
     useTrackPlayer();
 
   const { isFetching, downloadedEpisodes, fetchDownloadedEpisodes } = useDownloadedEpisodesFetch()
+
+  useOnScreenFocus(navigation, fetchDownloadedEpisodes)
 
   function openEpisodePage(channel, episode) {
     Navigations.navigateToPodcastEpisodePage(navigation, channel, episode);
@@ -42,6 +46,7 @@ export function DownloadsPage({ navigation }) {
     const episodeDownloadService = new EpisodeDownloadService()
 
     await episodeDownloadService.deleteDownloadedEpisode(episode)
+    await podcastEpisodeRepository.deleteDownloadedEpisode(episode)
 
     await fetchDownloadedEpisodes()
   }

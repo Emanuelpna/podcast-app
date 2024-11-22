@@ -83,4 +83,13 @@ export class AsyncStorageDatabase extends Database {
       throw error
     }
   }
+
+  async removeCollection(collectionName) {
+    try {
+      await this._db.removeItem(collectionName)
+    } catch (error) {
+      LoggingService.log("Error deleting collection with AsyncStorageDatabase: ", error);
+      throw error
+    }
+  }
 }

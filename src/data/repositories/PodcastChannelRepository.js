@@ -20,11 +20,6 @@ export class PodcastChannelRepository {
     return this._db.getAllItems(DatabaseCollectionNames.SUBSCRIBED_PODCASTS, 'title')
   }
 
-  async getSavedEpisodesBySubscribedChannel(channelId) {
-    return this._db.searchByField(DatabaseCollectionNames.SUBSCRIBED_PODCAST_EPISODES, 'channelId', channelId)
-  }
-
-
   async getChannelById(channelId) {
     return await this._db.getItemDetails(DatabaseCollectionNames.SUBSCRIBED_PODCASTS, channelId)
   }

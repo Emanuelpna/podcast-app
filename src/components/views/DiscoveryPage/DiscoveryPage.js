@@ -10,6 +10,7 @@ import { Layout } from '../../commons/Layout/Layout';
 import { PageTitle } from '../../commons/PageTitle/PageTitle';
 import { MiniPlayer } from '../../player/MiniPlayer/MiniPlayer';
 import { PodcastEpisodeCard } from '../../podcasts/PodcastEpisodeCard/PodcastEpisodeCard';
+import { podcastEpisodeRepository } from '../../../data/repositories';
 
 
 export function DiscoveryPage({ navigation }) {
@@ -40,10 +41,11 @@ export function DiscoveryPage({ navigation }) {
     else play();
   }
 
-  async function downloadEpisode(episode) {
+  async function downloadEpisode(channel, episode) {
     const episodeDownloadService = new EpisodeDownloadService()
 
     await episodeDownloadService.startDownload(episode)
+    await podcastEpisodeRepository.saveDownloadedEpisode(channel.id, episode)
   }
 
   return (
@@ -62,7 +64,7 @@ export function DiscoveryPage({ navigation }) {
             channel={item.channel}
             onEpisodePlay={() => playPodcastEpisode(item.channel, item.episode)}
             onOpenEpisodePage={() => openEpisodePage(item.channel, item.episode)}
-            onDownloadEpisode={() => downloadEpisode(item.episode)}
+            onDownloadEpisode={() => downloadEpisode(item.channel, item.episode)}
           />
         )}
       />

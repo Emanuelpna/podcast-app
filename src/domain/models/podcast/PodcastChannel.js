@@ -3,9 +3,9 @@ export class PodcastChannel {
    * @typedef {import('./PodcastAuthor').PodcastAuthor} PodcastAuthor
    * @param {PodcastAuthor} audioFile
    */
-  constructor(title, website, author, description, lastPublishDate, logo, feedRSSUrl, totalEpisodesQuantity) {
+  constructor(id, title, website, author, description, lastPublishDate, logo, feedRSSUrl, totalEpisodesQuantity) {
     /** @type {string} */
-    this.id = null;
+    this.id = id;
     /** @type {string} */
     this.title = title;
     /** @type {string} */

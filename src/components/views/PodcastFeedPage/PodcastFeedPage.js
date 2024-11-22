@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import { View, FlatList } from 'react-native';
 
 import { Navigations } from '../../../data/Navigations';
+import { LoggingService } from '../../../data/services/LoggingService';
 import { EpisodeDownloadService } from '../../../data/services/EpisodeDownloadService';
 import { podcastChannelRepository, podcastEpisodeRepository } from '../../../data/repositories';
 import { useSubscribedPodcastsFetch } from '../../../data/hooks/podcast/useSubscribedPodcastsFetch';
@@ -45,17 +46,20 @@ export function PodcastFeedPage({ route, navigation }) {
   }
 
   async function onUnsubscribeFromChannel(channelId) {
-    await podcastEpisodeRepository.deleteEpisodesFromChannel(channelId)
+    try {
+      await podcastChannelRepository.unsubscribeFromChannel(channelId)
 
-    await podcastChannelRepository.unsubscribeFromChannel(channelId)
-
-    Navigations.navigateToSubscribePage(navigation)
+      Navigations.navigateToSubscribePage(navigation)
+    } catch (error) {
+      LoggingService.error('Erro ao se desinscrever do Canal', error)
+    }
   }
 
-  async function downloadEpisode(episode) {
+  async function downloadEpisode(channel, episode) {
     const episodeDownloadService = new EpisodeDownloadService()
 
     await episodeDownloadService.startDownload(episode)
+    await podcastEpisodeRepository.saveDownloadedEpisode(channel.id, episode)
   }
 
   useEffect(() => {
@@ -65,12 +69,12 @@ export function PodcastFeedPage({ route, navigation }) {
   }, [episodesFromChannel])
 
   useEffect(() => {
-    if (!podcastChannel?.id) {
+    if (!podcastChannel?.feedRSSUrl) {
       Navigations.navigateToSubscribePage(navigation)
       return
     }
 
-    fetchEpisodesFromChannel(podcastChannel.id)
+    fetchEpisodesFromChannel(podcastChannel.feedRSSUrl)
   }, [])
 
   if (isFetchingEpisodes || !podcastChannel) return <Loading />;
@@ -95,7 +99,7 @@ export function PodcastFeedPage({ route, navigation }) {
             episode={podcastEpisode}
             onEpisodePlay={() => playPodcastEpisode(podcastEpisode)}
             onOpenEpisodePage={() => openEpisodePage(podcastEpisode)}
-            onDownloadEpisode={() => downloadEpisode(podcastEpisode)}
+            onDownloadEpisode={() => downloadEpisode(podcastChannel, podcastEpisode)}
           />
         )}
       />

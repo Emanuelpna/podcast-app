@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
+
+import { SubscriptionService } from "../../services/SubscriptionService";
 import { EpisodeDownloadService } from "../../services/EpisodeDownloadService";
+
 import { podcastChannelRepository, podcastEpisodeRepository } from "../../repositories";
 
 /**
@@ -23,12 +26,14 @@ export function useDownloadedEpisodesFetch() {
       const episodeId = episodeFileName.replace('podcast-app-', '').replace('.mp3', '')
 
       /** @type {PodcastEpisode | null} episode */
-      const episode = await podcastEpisodeRepository.getEpisodeDetaislById(episodeId)
+      const episode = await podcastEpisodeRepository.getDownloadedEpisodeByID(episodeId)
 
       if (!episode) continue
 
-      /** @type {PodcastChannel | null} episode */
+      /** @type {PodcastChannel | null} channel */
       const channel = await podcastChannelRepository.getChannelById(episode.channelId)
+
+      if (!channel) continue
 
       episodes.push({ episode, channel })
     }

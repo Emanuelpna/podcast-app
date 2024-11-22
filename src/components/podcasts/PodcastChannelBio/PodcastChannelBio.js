@@ -6,7 +6,6 @@ import { Card } from '../../commons/Card/Card';
 import { Button } from '../../commons/Button/Button';
 
 import * as S from './styles';
-import { colors } from '../../../styles/colors';
 
 export function PodcastChannelBio({ channel, onUnsubscribeFromChannel }) {
   const [isDescriptionTruncated, setIsDescriptionTruncated] = useState(true);

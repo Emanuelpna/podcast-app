@@ -30,6 +30,7 @@ export class RSSReader {
     if (!channel && !episodes) return null;
 
     const podcastChannel = new PodcastChannel(
+      randomUUID(),
       channel.title,
       channel.link,
       new PodcastAuthor(
@@ -49,7 +50,7 @@ export class RSSReader {
 
         return new PodcastEpisode(
           randomUUID(),
-          channel.link,
+          podcastChannel.id,
           episode.title,
           episode.link,
           episode.description,

@@ -20,79 +20,86 @@ export class PodcastEpisodeRepository {
     return await this._db.getItemDetails(DatabaseCollectionNames.SUBSCRIBED_PODCAST_EPISODES, episodeId)
   }
 
-  async getSavedEpisodesBySubscribedChannel(channelId) {
-    return this._db.searchByField(DatabaseCollectionNames.SUBSCRIBED_PODCAST_EPISODES, 'channelId', channelId)
+  async getDownloadedEpisodeByID(episodeId) {
+    return await this._db.getItemDetails(DatabaseCollectionNames.DOWNLOADED_PODCAST_EPISODES, episodeId)
+  }
+
+  async getLatestsEpisodesFromSubscribedChannels() {
+    const newestEpisodes = []
+
+    const episodes = await this._db.getAllItems(DatabaseCollectionNames.NEWEST_PODCAST_EPISODES)
+
+    for await (const episode of episodes) {
+      const channel = await this._db.getItemDetails(DatabaseCollectionNames.SUBSCRIBED_PODCASTS, episode.channelId)
+
+      newestEpisodes.push({ channel, episode })
+    }
+
+    return newestEpisodes
   }
 
   /**
-   * @param {PodcastChannel[]} channels
-   */
-  async getLatestsEpisodesFromSubscribedChannels(channels) {
-    const latestsEpisodes = []
+  * @param {PodcastChannel} channel
+  * @param {PodcastEpisode[]} episodes
+  */
+  async saveNewestsEpisodesFromSubscribedChannel(channel, episodes) {
+    await this._db.removeCollection(DatabaseCollectionNames.NEWEST_PODCAST_EPISODES)
 
-    const daysPastToLookForEpisodes = 7 // one week
+    const daysPastToLookForEpisodes = 31 // one month
 
-    const daysToMilisseconds = 24 * 60 * 60 * 1000
+    const daysToMilisseconds = day => day * 24 * 60 * 60 * 1000
 
     const today = new Date()
-    const oldReferenceDate = new Date(today.getTime() - daysPastToLookForEpisodes * daysToMilisseconds);
+    const oldReferenceDate = new Date(today.getTime() - daysToMilisseconds(daysPastToLookForEpisodes));
 
-    for await (const channel of channels) {
-      const episodes = await this._db.searchByField(DatabaseCollectionNames.SUBSCRIBED_PODCAST_EPISODES, 'channelId', channel.id)
+    for await (const episode of episodes) {
+      const episodePublishDate = new Date(episode.publishDate)
 
-      for await (const episode of episodes) {
-        const episodePublishDate = new Date(episode.publishDate)
+      if (!episodePublishDate) continue
 
-        if (!episodePublishDate) continue
+      // published earlier than the last 31 days
+      if (episodePublishDate.getTime() < oldReferenceDate.getTime())
+        continue
 
-        if (episodePublishDate.getTime() >= oldReferenceDate.getTime())
-          latestsEpisodes.push({ channel, episode })
+      LoggingService.log('   -> Salvando o episódio: ', episode.title);
+
+      const episodeToSave = {
+        ...episode.toObject(),
+        channelId: channel.id,
       }
-    }
 
-    return latestsEpisodes.sort((a, b) => new Date(b.episode.publishDate) - new Date(a.episode.publishDate))
+      await this._db.insertItem(DatabaseCollectionNames.NEWEST_PODCAST_EPISODES, episodeToSave)
+
+      LoggingService.log('     -> Episódio salvo com sucesso');
+    }
   }
 
   /**
   * @param {string} channelId
-  * @param {PodcastEpisode[]} episodes
+  * @param {PodcastEpisode} episode
   */
-  async saveEpisodesFromSubscribedChannel(channelId, episodes) {
-    for await (const episode of episodes) {
-      LoggingService.log('   -> Salvando o episódio: ', episode.title);
-
-      const episodeWithTitle = await this._db.searchByField(
-        DatabaseCollectionNames.SUBSCRIBED_PODCAST_EPISODES,
-        "title",
-        episode.title
-      )
-
-      if (episodeWithTitle && episodeWithTitle.length > 0) {
-        LoggingService.warn("     -> Episode is already saved")
-        continue
-      }
-
-      LoggingService.log('     -> Episódio ainda não está no banco');
-
-      const episodeToSave = {
-        ...episode.toObject(),
-        channelId: channelId,
-      }
-
-      await this._db.insertItem(DatabaseCollectionNames.SUBSCRIBED_PODCAST_EPISODES, episodeToSave)
-
-      LoggingService.log('     -> Episódio salvo com sucesso');
-
-      continue
+  async saveDownloadedEpisode(channelId, episode) {
+    const episodeToSave = {
+      ...episode.toObject(),
+      channelId: channelId,
     }
+
+    await this._db.insertItem(DatabaseCollectionNames.DOWNLOADED_PODCAST_EPISODES, episodeToSave)
+  }
+
+  /**
+  * @param {PodcastEpisode} episode
+  */
+  async deleteDownloadedEpisode(episode) {
+    await this._db.removeItem(DatabaseCollectionNames.DOWNLOADED_PODCAST_EPISODES, episode.id)
   }
 
   async deleteEpisodesFromChannel(channelId) {
-    const episodesFromChannel = await this.getSavedEpisodesBySubscribedChannel(channelId)
+    const episodesFromChannel = await this._db.searchByField(DatabaseCollectionNames.NEWEST_PODCAST_EPISODES, 'channelId', channelId)
 
     if (episodesFromChannel !== null)
       for await (const episode of episodesFromChannel) {
-        await this._db.removeItem(DatabaseCollectionNames.SUBSCRIBED_PODCAST_EPISODES, episode.id)
+        await this._db.removeItem(DatabaseCollectionNames.NEWEST_PODCAST_EPISODES, episode.id)
       }
   }
 }

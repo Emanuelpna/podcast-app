@@ -26,7 +26,7 @@ export class SubscriptionService {
       LoggingService.log('   -> Starting saving episodes');
 
       this._podcastEpisodeRepository
-        .saveEpisodesFromSubscribedChannel(subscribedChannel.id, podcastEpisodes)
+        .saveNewestsEpisodesFromSubscribedChannel(subscribedChannel, podcastEpisodes)
         .then(() => {
           LoggingService.log('   -> Finished saving episodes');
         })
