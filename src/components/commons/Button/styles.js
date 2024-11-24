@@ -47,7 +47,7 @@ export const IconWrapper = styled.View`
 `
 
 export const Text = styled(NativeText)`
-  flex: 1;
+  width: auto;
   text-align: center;
   color: ${colors.text[900]};
   font-size: ${fonts.fontSize.base};

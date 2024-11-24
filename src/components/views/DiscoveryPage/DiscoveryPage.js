@@ -45,7 +45,7 @@ export function DiscoveryPage({ navigation }) {
     const episodeDownloadService = new EpisodeDownloadService()
 
     await episodeDownloadService.startDownload(episode)
-    await podcastEpisodeRepository.saveDownloadedEpisode(channel.id, episode)
+    await podcastEpisodeRepository.saveDownloadedEpisode(channel, episode)
   }
 
   return (

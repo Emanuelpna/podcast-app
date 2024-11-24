@@ -59,7 +59,7 @@ export function PodcastFeedPage({ route, navigation }) {
     const episodeDownloadService = new EpisodeDownloadService()
 
     await episodeDownloadService.startDownload(episode)
-    await podcastEpisodeRepository.saveDownloadedEpisode(channel.id, episode)
+    await podcastEpisodeRepository.saveDownloadedEpisode(channel, episode)
   }
 
   useEffect(() => {

@@ -75,7 +75,7 @@ export class FirestoreDatabase extends Database {
       const collectionQuery = query(
         collection(this._db, collectionName),
         where("userId", "==", user.uid),
-        orderBy(sortBy, 'desc')
+        orderBy(sortBy, 'asc')
       );
 
       const querySnapshot = await getDocs(collectionQuery)

@@ -46,7 +46,7 @@ export class AsyncStorageDatabase extends Database {
     return data.sort((a, b) => {
       if (!a?.[sortBy] || !b?.[sortBy]) return 0
 
-      return a[sortBy].localeCompare(b[sortBy])
+      return a[sortBy].localeCompare(b[sortBy], "pt", { sensitivity: "base", ignorePunctuation: true })
     })
   }
 

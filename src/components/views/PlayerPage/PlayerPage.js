@@ -6,6 +6,7 @@ import { Player } from '../../player/Player/Player';
 
 import { Layout } from '../../commons/Layout/Layout';
 
+let currentPlaybackRateIndex = 1
 const PLAYBACK_RATES = [0.5, 1.0, 2.0, 3.0]
 
 export function PlayerPage({ navigation }) {
@@ -22,8 +23,6 @@ export function PlayerPage({ navigation }) {
     backwardsBySeconds,
     setAudioRate
   } = useTrackPlayer();
-
-  let currentPlaybackRateIndex = 1
 
   function openEpisodePage() {
     Navigations.navigateToPodcastEpisodePage(
@@ -46,6 +45,8 @@ export function PlayerPage({ navigation }) {
     currentPlaybackRateIndex++
 
     const rate = PLAYBACK_RATES[currentPlaybackRateIndex % PLAYBACK_RATES.length]
+
+    console.log({ rate });
 
     setAudioRate(rate)
   }

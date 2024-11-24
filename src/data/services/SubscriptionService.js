@@ -25,8 +25,26 @@ export class SubscriptionService {
 
       LoggingService.log('   -> Starting saving episodes');
 
+      const newestEpisodes = []
+
+      /** @type {PodcastChannel[]} subscribedChannel */
+      const subscribedChannels = await this._podcastChannelRepository.getSubscribedChannels()
+
+      for (const channel of subscribedChannels) {
+        const podcastData = await this.fetchFeedRSS(channel.feedRSSUrl)
+
+        for (const episode of podcastData.podcastEpisodes) {
+          const episodeToSave = {
+            ...episode.toObject(),
+            channelId: channel.id,
+          }
+
+          newestEpisodes.push(episodeToSave)
+        }
+      }
+
       this._podcastEpisodeRepository
-        .saveNewestsEpisodesFromSubscribedChannel(subscribedChannel, podcastEpisodes)
+        .saveNewestsEpisodesFromSubscribedChannel(newestEpisodes)
         .then(() => {
           LoggingService.log('   -> Finished saving episodes');
         })

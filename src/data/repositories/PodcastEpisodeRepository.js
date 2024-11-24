@@ -16,10 +16,6 @@ export class PodcastEpisodeRepository {
     this._db = db;
   }
 
-  async getEpisodeDetaislById(episodeId) {
-    return await this._db.getItemDetails(DatabaseCollectionNames.SUBSCRIBED_PODCAST_EPISODES, episodeId)
-  }
-
   async getDownloadedEpisodeByID(episodeId) {
     return await this._db.getItemDetails(DatabaseCollectionNames.DOWNLOADED_PODCAST_EPISODES, episodeId)
   }
@@ -39,49 +35,47 @@ export class PodcastEpisodeRepository {
   }
 
   /**
-  * @param {PodcastChannel} channel
   * @param {PodcastEpisode[]} episodes
   */
-  async saveNewestsEpisodesFromSubscribedChannel(channel, episodes) {
+  async saveNewestsEpisodesFromSubscribedChannel(episodes) {
     await this._db.removeCollection(DatabaseCollectionNames.NEWEST_PODCAST_EPISODES)
 
-    const daysPastToLookForEpisodes = 31 // one month
+    const daysPastToLookForEpisodes = 7 // one week
 
     const daysToMilisseconds = day => day * 24 * 60 * 60 * 1000
 
     const today = new Date()
     const oldReferenceDate = new Date(today.getTime() - daysToMilisseconds(daysPastToLookForEpisodes));
 
-    for await (const episode of episodes) {
+    const sortedEpisodes = episodes.sort((a, b) => new Date(b.publishDate) - new Date(a.publishDate))
+
+    for await (const episode of sortedEpisodes) {
       const episodePublishDate = new Date(episode.publishDate)
 
       if (!episodePublishDate) continue
 
-      // published earlier than the last 31 days
+      // published earlier than the last 7 days
       if (episodePublishDate.getTime() < oldReferenceDate.getTime())
         continue
 
       LoggingService.log('   -> Salvando o episódio: ', episode.title);
 
-      const episodeToSave = {
-        ...episode.toObject(),
-        channelId: channel.id,
-      }
-
-      await this._db.insertItem(DatabaseCollectionNames.NEWEST_PODCAST_EPISODES, episodeToSave)
+      await this._db.insertItem(DatabaseCollectionNames.NEWEST_PODCAST_EPISODES, episode)
 
       LoggingService.log('     -> Episódio salvo com sucesso');
     }
   }
 
   /**
-  * @param {string} channelId
+  * @param {PodcastChannel} channel
   * @param {PodcastEpisode} episode
   */
-  async saveDownloadedEpisode(channelId, episode) {
+  async saveDownloadedEpisode(channel, episode) {
+    const episodeObject = episode.toObject?.()
     const episodeToSave = {
-      ...episode.toObject(),
-      channelId: channelId,
+      ...(episodeObject ?? episode),
+      channelId: channel.id,
+      banner: episode.banner ?? channel.logo,
     }
 
     await this._db.insertItem(DatabaseCollectionNames.DOWNLOADED_PODCAST_EPISODES, episodeToSave)

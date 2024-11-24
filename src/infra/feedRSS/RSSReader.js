@@ -38,7 +38,7 @@ export class RSSReader {
         channel['itunes:owner']['itunes:email'],
       ),
       channel.description,
-      channel.lastBuildDate,
+      channel.lastBuildDate ?? episodes?.[0]?.pubDate,
       channel['itunes:image']?.['@_href'],
       feedUrl,
       episodes.length
